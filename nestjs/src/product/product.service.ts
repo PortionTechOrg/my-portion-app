@@ -83,7 +83,6 @@ export class ProductService {
         
         const { cloudinary, cloudinaryUploadFolder } = this.cloudinary.getCloudinary()
 
-        console.log("Files received:", files);
         const image_url_path = files.image_url ? files.image_url[0].path : null;
 
         const video_url_path = files.video_url ? files.video_url[0].path : null;
@@ -136,6 +135,10 @@ export class ProductService {
 
     async checkOut(user_id: string, checkoutDTO: AddressAndCartSchema) {
 
+        const serviceCharge = 100;
+        const deliveryFee = 1000
+        const shippingCost = checkoutDTO.cartItems.reduce((sum, _) => sum + deliveryFee, 0) // Free shipping over #50
+
         const orders: Order[] = [];
 
         for (const item of checkoutDTO.cartItems ) {
@@ -161,9 +164,9 @@ export class ProductService {
         await this.sequelize.transaction( async ( t) => {
 
             const { dataValues} = await OrderRecord.create( {
-                product_id: checkoutDTO.cartItems.map( item => item.id),
                 status: "pending",
-                order_ids: [],
+                reference: '',
+                total_amount: Number(checkoutDTO.cartItems.reduce((total, item) => total + item.price * item.quantity, serviceCharge + shippingCost)) ,
                 user_id,
             }, { transaction: t })
 
@@ -171,7 +174,7 @@ export class ProductService {
                 const order = await Order.create( {
                         amount: String(item.price),
                         portion: item.quantity,
-                        order_record_id: String(dataValues.id),
+                        order_record_id: String(dataValues.id), 
                         product_id: item.id,
                         status: 'pending',
                         user_id,
@@ -191,16 +194,6 @@ export class ProductService {
                     title: 'Order Created',
                     message: `You have a new order for ${item.name} has been created`,
                     role_target: 'user',
-                })
-
-                await OrderRecord.update( {
-                        order_ids: order.id,
-                },
-                { 
-                        where: {
-                            id: dataValues.id
-                        },
-                        transaction: t
                 })
 
                 orders.push(order)

@@ -52,8 +52,7 @@ export class OrderService {
     }
 
     async addNewOrder( user_id: string, productId: string, quantity: string ) {
-        // Logic to add a new order
-        // This is a placeholder implementation
+        
         return {
             success: true,
             message: "New order added successfully",
@@ -68,42 +67,22 @@ export class OrderService {
             { where: { id: orderRecordId } }
         );
 
-        const orderRecord = await OrderRecord.findOne({
+        const orderRecord = await OrderRecord.findAll({
             where: {
                 id: orderRecordId,
             }
         });
 
-        for( const orderRecordProductId of orderRecord?.product_id || [] ){
+
+        for( const orderRecordProductId of orderRecord || [] ){
+            
             await Order.update({ 
-                status: "delivered"
+                status: "pending"
             }, {
                 where: {
-                    product_id: orderRecordProductId
+                    id: orderRecordProductId.id
                 }
             })
-
-            const order = await Order.findOne( {
-                where: {
-                    
-                    order_record_id: orderRecordId,
-                    product_id: orderRecordProductId
-                }
-            })
-
-
-            const prevOrder = await Product.findOne({ where: { id: order?.product_id}})
-
-
-
-            const p = await Product.decrement( "available_portions",
-                {
-                    by: order?.portion,
-                    where: {
-                        id: order?.product_id
-                    }
-                }
-            )
 
         }
 

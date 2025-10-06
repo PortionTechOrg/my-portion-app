@@ -3,9 +3,9 @@ import { Status } from "../enums";
 export interface OrderRecordAttribute {
     id?: string;
     user_id: string;
-    product_id: string[];
-    order_ids: string | string[];
+    total_amount: number,
     status: Status;
+    reference: string | null,
     
     updatedAt?: Date;
     deletedAt?: Date,
