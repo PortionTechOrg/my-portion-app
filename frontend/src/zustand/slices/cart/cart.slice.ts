@@ -18,6 +18,8 @@ interface checkoutItem {
     }
 
 export type CartItemContextType = {
+  isSideBarOpen: boolean,
+  toggleCartSidebar: () => void,
   cartItems: Partial<CartItem>[];
   addToCart: (item: Partial<CartItem>) => void;
   removeFromCart: (id: string) => void;
@@ -39,6 +41,8 @@ export const createCartSlice: StateCreator<
   [],
   CartItemContextType
 > = (set) => ({
+  isSideBarOpen: false,
+  toggleCartSidebar: () => set((state) => ({ isSideBarOpen: !state.isSideBarOpen })),
   checkoutItem: null,
   cartItems: [],
   cartCount: 0,

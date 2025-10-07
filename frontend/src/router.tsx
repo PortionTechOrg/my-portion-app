@@ -10,7 +10,7 @@ import KYCPage from "./pages/vendor/kyc";
 import ProtectedRoutes from "./hooks/protected-routes";
 import Checkout from "./pages/check-out";
 import CompleteCheckOutPayment from "./pages/complete-checkout-payment";
-import ProductDetailPage from "./pages/product-details";
+// import ProductDetailPage from "./pages/product-details";
 import VendorDashboardLayout from "./components/Layout/vendor-dashboard-layout";
 import VendorProductsPage from "./pages/vendor/products";
 import DashboardNotificationPage from "./pages/vendor/notification";
@@ -20,6 +20,7 @@ import DashboardOrdersPage from "./pages/vendor/orders";
 import AdminDashboardLayout from "./components/Layout/admin-dashboard-layout";
 import AdminDashboardPage from "./pages/admin";
 import AdminOrdersPage from "./pages/admin/orders";
+import ProductDetailPage from "./pages/product-detail";
 
 const AppRouter = () => (
   
