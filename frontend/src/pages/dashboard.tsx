@@ -72,7 +72,7 @@ export default function MarketPlace() {
       <main className="max-w-7xl mx-auto px-4 lg:px-16 py-8">
         {/* City Indicator */}
         <div className="container mx-auto py-2">
-            <CitySelector cities={["lagos", "Ibadan", "Abuja"]} />
+            <CitySelector cities={["lagos", "All locations", "Ibadan", "Abuja"]} />
         </div>
 
         <div className="container mx-auto py-2 space-y-12">

@@ -9,6 +9,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import useCompleteKyc from "@/hooks/form-hooks/use-complete-kyc-hook"
 import toast from "react-hot-toast"
 import { Link } from "react-router-dom"
+import { useAuthStore } from "@/zustand/store"
 
 interface KYCFormData {
   // Personal Information
@@ -102,8 +103,9 @@ export default function KYCPage() {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
+  const { user } = useAuthStore()
 
-  const renderStep1 = () => (
+  const RenderStep1 = () => (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -124,7 +126,7 @@ export default function KYCPage() {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your first name" {...field} />
+                  <Input className="Capitalize" defaultValue={user?.firstname} placeholder="Enter your first name" {...field} />
                 </FormControl>
                 <FormDescription />
                 <FormMessage />
@@ -140,7 +142,7 @@ export default function KYCPage() {
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your last name" {...field} />
+                  <Input className="capitalize" defaultValue={user?.lastname} placeholder="Enter your last name" {...field} />
                 </FormControl>
                 <FormDescription />
                 <FormMessage />
@@ -189,7 +191,7 @@ export default function KYCPage() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="johndoe@mail.com" {...field} />
+                  <Input defaultValue={user?.email} placeholder="johndoe@mail.com" {...field} />
                 </FormControl>
                 <FormDescription />
                 <FormMessage />
@@ -301,7 +303,7 @@ export default function KYCPage() {
     </div>
   )
 
-  const renderStep2 = () => (
+  const RenderStep2 = () => (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -415,7 +417,7 @@ export default function KYCPage() {
     </div>
   )
 
-  const renderStep3 = () => (
+  const RenderStep3 = () => (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -703,7 +705,7 @@ export default function KYCPage() {
     </div>
   )
 
-  const renderStep4 = () => (
+  const RenderStep4 = () => (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -915,7 +917,7 @@ export default function KYCPage() {
     </div>
   )
 
-  const renderStep5 = () => (
+  const RenderStep5 = () => (
     <div className="space-y-6">
       <div className="text-center">
         <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
@@ -988,12 +990,12 @@ export default function KYCPage() {
 
   const renderStep = () => {
     switch(currentStep) {
-      case 1: return renderStep1()
-      case 2: return renderStep2()
-      case 3: return renderStep3()
-      case 4: return renderStep4()
-      case 5: return renderStep5()
-      default: return renderStep1()
+      case 1: return <RenderStep1 />
+      case 2: return <RenderStep2 />
+      case 3: return <RenderStep3 />
+      case 4: return <RenderStep4 />
+      case 5: return <RenderStep5 />
+      default: return <RenderStep1 />
     }
   }
 

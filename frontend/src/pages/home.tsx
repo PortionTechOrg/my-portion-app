@@ -53,7 +53,7 @@ export default function LandingPage() {
               <Link to="/">Marketplace</Link>
             </Button>
             <Button className="bg-transparent text-black" variant="outline" size="lg" asChild>
-              <Link to={isLoggedIn ? "/vendor": "/login?vendor=true"}>Vendors</Link>
+              <Link to={isLoggedIn ? "/dashboard": "/login?vendor=true"}>Vendors</Link>
             </Button>
           </div>
 

@@ -20,7 +20,8 @@ import DashboardOrdersPage from "./pages/vendor/orders";
 import AdminDashboardLayout from "./components/Layout/admin-dashboard-layout";
 import AdminDashboardPage from "./pages/admin";
 import AdminOrdersPage from "./pages/admin/orders";
-import ProductDetailPage from "./pages/product-detail";
+import ProductDetailPage from "./pages/product-details";
+import FeaturedProductedPage from "./pages/featured-product-page";
 
 const AppRouter = () => (
   
@@ -28,6 +29,7 @@ const AppRouter = () => (
           
           <Route path="/" element={<MarketPlace />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/products" element={<FeaturedProductedPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterBuyer />} />
