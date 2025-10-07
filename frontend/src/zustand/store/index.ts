@@ -80,6 +80,21 @@ export const useAuthStore = create<AuthState>()((...a) => (
 }
 ))
 
+type CityState = {
+  city: string;
+  setCity: (city: string) => void;
+};
+
+export const useCityStore = create<CityState>()(
+    persist(
+        (set) => ({
+        city: 'All Locations',
+        setCity: (city) => set({ city }),
+        }), 
+        { name: "city",
+        }
+    ))
+
 export const useAdminStore = create<AdminOrdersState>()((...a) => (
 {
     ...createAdminOrderSlice(...a),
