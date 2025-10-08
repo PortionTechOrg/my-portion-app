@@ -125,7 +125,7 @@ export function CartContent() {
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
                 <Link to={`${isLoggedIn ? '/cart': '/login'}`}>
-                {isLoggedIn ? 'Proceed to Checkout' : 'Sign In to Checkout'}
+                    {isLoggedIn ? 'Proceed to Checkout' : 'Sign In to Checkout'}
                 </Link>
                 </Button>
             </div>

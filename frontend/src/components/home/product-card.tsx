@@ -5,6 +5,7 @@ import type { ProductAttribute } from "@shared/types/product"
 import { Link } from "react-router-dom"
 
 import { Progress } from "@/components/ui/progress";
+import { formatCurrency } from "@/lib/utils"
 
 
 interface ProductCardProps {
@@ -15,10 +16,6 @@ interface ProductCardProps {
 export function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
   const discountPercentage = Math.round(((product.price_per_portion - product.price_per_portion) / product.price_per_portion) * 100)
-  
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(price / 100);
-  }
 
   const portionsPercentage = ((product.portion_size) - product.available_portions)/( product.portion_size)  * 100;
 
@@ -49,7 +46,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
         </div>
         <div className="flex justify-between items-center pt-1">
             <p className="text-base font-bold">
-              {formatPrice(product.price_per_portion)}
+              {formatCurrency(product.price_per_portion)}
             </p>
             <Button size="icon" className="h-8 w-8" onClick={onAddToCart}>
                 <ShoppingCart className="h-4 w-4" />

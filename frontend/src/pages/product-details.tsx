@@ -28,16 +28,14 @@ import toast from "react-hot-toast";
 export default function ProductDetailPage() {
     const { id } = useParams<{id: string}>();
     const { getProductsById, clearSelectedProduct } = useProductStore()
-    const { data: { addToCart, cartCount,   } } = useCartState()
+    const { data: { addToCart, cartCount, updateCartItemQuantity  } } = useCartState()
 
     const { toggleCartSidebar, isSideBarOpen } = useCartStore()
     const { data } = useProductState()
 
     const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-
     
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState<number>(1);
 
 
     const product = data.selectedProduct
@@ -50,8 +48,11 @@ export default function ProductDetailPage() {
           image: product.image_url,
           price: product.price_per_portion,
           unit: product.quantity_unit,
+          quantity,
           vendor_id: product.seller_id,
         } as CartItem
+
+        updateCartItemQuantity(String(product.id), quantity)
         addToCart(newCartItem),
         
         toast.success(`${quantity} x ${product.name} has been added to your cart.`);
@@ -95,7 +96,7 @@ export default function ProductDetailPage() {
           <SlideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
           <CartSlide isOpen={isSideBarOpen} onClose={() => toggleCartSidebar()} />
 
-          <div className="container mx-auto px-4 py-12">
+          <div className="max-w-7xl mx-auto px-4 lg:px-16 py-8 container">
       <div className="flex items-center text-sm text-muted-foreground mb-4">
         <Link to="/" className="hover:text-primary">Home</Link>
         <ChevronRight className="h-4 w-4 mx-1" />
@@ -146,11 +147,11 @@ export default function ProductDetailPage() {
               <div className="flex items-center gap-4 mb-6">
                 <p className="font-medium">Quantity:</p>
                 <div className="flex items-center gap-2 border rounded-md p-1">
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setQuantity(q => Math.max(1, Number(q) - 1))}>
                     <Minus className="h-4 w-4" />
                   </Button>
                   <span className="w-8 text-center font-bold">{quantity}</span>
-                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setQuantity(q => q + 1)}>
+                  <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setQuantity(q =>   Number(q) + 1)}>
                     <Plus className="h-4 w-4" />
                   </Button>
                 </div>

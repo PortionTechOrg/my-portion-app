@@ -3,11 +3,15 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Separator } from '@/components/ui/separator';
 import { ArrowRight, ShoppingCart } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
-import { useCartStore } from '@/zustand/store';
+import { useAuthStore, useCartStore } from '@/zustand/store';
 import { Link } from 'react-router-dom';
+import { formatCurrency } from '@/lib/utils';
+
 
 export function DesktopCartSummary() {
   const { cartItems } = useCartStore();
+  const { isLoggedIn } = useAuthStore()
+  
 
   const subtotal = cartItems.reduce(
     (acc, item) => acc + Number(item?.price) * Number(item?.quantity),
@@ -16,9 +20,6 @@ export function DesktopCartSummary() {
   const shipping = 500; // Example shipping cost
   const total = subtotal + shipping;
   
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(price / 100);
-  }
 
   return (
     <Card className="sticky top-24">
@@ -45,9 +46,9 @@ export function DesktopCartSummary() {
                         </div>
                         <div className='flex-grow'>
                             <p className="font-semibold text-sm leading-tight">{product.name}</p>
-                            <p className="text-xs text-muted-foreground">{product.quantity} x {formatPrice(Number(product.price))}</p>
+                            <p className="text-xs text-muted-foreground">{product.quantity} x {formatCurrency(Number(product.price))}</p>
                         </div>
-                        <p className="font-bold text-sm">{formatPrice(Number(product.price) * Number(product.quantity))}</p>
+                        <p className="font-bold text-sm">{formatCurrency(Number(product.price) * Number(product.quantity))}</p>
                     </div>
                 ))}
                 </CardContent>
@@ -55,22 +56,26 @@ export function DesktopCartSummary() {
             <CardFooter className="flex-col items-stretch space-y-4 pt-6">
                 <div className="flex justify-between">
                 <p className="text-muted-foreground">Subtotal</p>
-                <p className="font-semibold">{formatPrice(subtotal)}</p>
+                <p className="font-semibold">{formatCurrency(subtotal)}</p>
                 </div>
                 <div className="flex justify-between">
                 <p className="text-muted-foreground">Shipping</p>
-                <p className="font-semibold">{formatPrice(shipping)}</p>
+                <p className="font-semibold">{formatCurrency(shipping)}</p>
                 </div>
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
                 <p>Total</p>
-                <p>{formatPrice(total)}</p>
+                <p>{formatCurrency(total)}</p>
                 </div>
-                 <Button asChild size="lg" className="w-full">
-                  <Link to="/cart">
-                    Proceed to Checkout <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
+                 <Button
+                    asChild
+                    size="lg" 
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                    >
+                    <Link to={`${isLoggedIn ? '/cart': '/login'}`}>
+                    {isLoggedIn ? 'Proceed to Checkout' : 'Sign In to Checkout'} <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
             </CardFooter>
         </>
       )}

@@ -1,6 +1,7 @@
 export const Status = {
     Pending: 'pending',
     Delivered: 'delivered',
+    Paid: 'paid',
     Completed: 'completed',
     Cancelled: 'cancelled'
 } as const;

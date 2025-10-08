@@ -114,7 +114,7 @@ export const createCartSlice: StateCreator<
       const found = state.cartItems.find((ci) => ci.id === item.id);
 
       if (!found) {
-        updated = [...state.cartItems, { ...item, quantity: 1 }];
+        updated = [...state.cartItems, { ...item, quantity: item.quantity || 1 }];
       } else {
         updated = state.cartItems.map((ci) =>
           ci.id === item.id
@@ -148,6 +148,7 @@ export const createCartSlice: StateCreator<
           set(({ checkoutItem: res.data.data, loading: false }))
           useModalStore.getState().togglePaymentModal()
         }catch(err:any){
+          useModalStore.getState().togglePaymentModal()
           if (err.response) {
               toast.error(err.response.data.message, { duration: 5000})                    
             } else {

@@ -60,39 +60,64 @@ export class OrderService {
         };
     }
 
-    async markAsPaid(orderRecordId: string) {
+    async markAsPaid(order_record_id: string) {
 
-        const updatedOrderRecord = await OrderRecord.update(
-            { status: 'pending' },
-            { where: { id: orderRecordId } }
-        );
-
-        const orderRecord = await OrderRecord.findAll({
+        await Order.update({ 
+            status: "paid"
+        }, {
             where: {
-                id: orderRecordId,
+                order_record_id
             }
-        });
+        })
 
+        const orders = await Order.findAll( { where: { order_record_id}})
 
-        for( const orderRecordProductId of orderRecord || [] ){
-            
-            await Order.update({ 
-                status: "pending"
-            }, {
-                where: {
-                    id: orderRecordProductId.id
+        for ( const order of orders ){
+            const p = await Product.decrement( "available_portions",
+                {
+                    by: Number(order.portion),
+                    where: {
+                        id: order.product_id
+                    }
                 }
-            })
-
+            )
         }
 
         return {
             success: true,
-            data: {
-                orderRecordId,
-                updatedOrderRecord
-            },
-            message: "Order updated"
+            data: null,
+            message: "Order marked as pending"
+        }
+
+    }
+
+    async markAsCompleted(order_record_id: string) {
+
+        await Order.update({ 
+            status: "completed"
+        }, {
+            where: {
+                order_record_id
+            }
+        })
+
+        const orders = await Order.findAll( { where: { order_record_id}})
+
+        for ( const order of orders ){
+            const p = await Product.decrement( "available_portions",
+                {
+                    by: Number(order.portion),
+                    where: {
+                        id: order.product_id
+                    }
+                }
+            )
+        }
+
+        return {
+            success: true,
+            data: null,
+            message: "Order marked as completed"
         }
 
     }

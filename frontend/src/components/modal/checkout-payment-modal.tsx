@@ -5,15 +5,15 @@ import toast from "react-hot-toast"
 import { useState } from "react"
 import CheckOutApi from "@/api/checkout/check-out-api"
 import { useCartState } from "@/zustand/hooks/cart/cart.hook"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useModalStore } from "@/zustand/store"
 import { Label } from "../ui/label"
 import { formatCurrency } from "@/lib/utils"
 import { Card, CardContent, CardDescription,  CardTitle } from "../ui/card"
 
 
-
 export default function CheckoutPaymentModal() {
+    const navigate = useNavigate();
 
     const { isPaymentModalOpen, togglePaymentModal} = useModalStore()
     const [paymentConfirmed, setPaymentConfirmed] = useState(false);
@@ -102,11 +102,12 @@ export default function CheckoutPaymentModal() {
                         if(response.success){
 
                             setPaymentConfirmed(true);
+                            navigate('/')
                             clearCart()
                             
-                        }else{
-                            
                         }
+
+                        toast(response.message)
                         }
                     }
                         className="w-full"

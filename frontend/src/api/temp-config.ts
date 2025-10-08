@@ -41,7 +41,7 @@ apiPrivate.interceptors.response.use(
             return api(prevRequest);
         }
         
-        return error.response.data;
+        return Promise.reject(error);
     }
 );
 

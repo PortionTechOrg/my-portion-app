@@ -72,7 +72,7 @@ const [isMenuOpen, setIsMenuOpen] = useState(false)
         <SlideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
         <CartSlide isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
-        <div className="container mx-auto px-4 py-8">
+        <div className="max-w-7xl mx-auto px-4 lg:px-16 py-8 container">
         <div className="text-center mb-12">
             <h1 className="font-headline text-2xl md:text-5xl font-bold">Your Shopping Cart</h1>
             <p className="text-muted-foreground">Review your items and proceed to checkout.</p>
