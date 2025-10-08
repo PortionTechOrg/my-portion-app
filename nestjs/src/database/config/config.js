@@ -6,6 +6,7 @@ const development= {
   database: process.env.DB_NAME,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
+  seederStorage: 'sequelize',
   dialect: process.env.DB_DIALECT
 }
 
@@ -16,6 +17,7 @@ const test = {
     host: process.env.DB_HOSTNAME,
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
+    seederStorage: 'sequelize',
     dialectOptions: {
         ssl: {
             require: true,
@@ -30,7 +32,8 @@ const production = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALECT
+    dialect: process.env.DB_DIALECT,
+    seederStorage: 'sequelize'
 }
 
 module.exports = {

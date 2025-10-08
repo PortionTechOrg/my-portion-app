@@ -10,7 +10,6 @@ import KYCPage from "./pages/vendor/kyc";
 import ProtectedRoutes from "./hooks/protected-routes";
 import Checkout from "./pages/check-out";
 import CompleteCheckOutPayment from "./pages/complete-checkout-payment";
-// import ProductDetailPage from "./pages/product-details";
 import VendorDashboardLayout from "./components/Layout/vendor-dashboard-layout";
 import VendorProductsPage from "./pages/vendor/products";
 import DashboardNotificationPage from "./pages/vendor/notification";
@@ -22,6 +21,7 @@ import AdminDashboardPage from "./pages/admin";
 import AdminOrdersPage from "./pages/admin/orders";
 import ProductDetailPage from "./pages/product-details";
 import FeaturedProductedPage from "./pages/featured-product-page";
+import CartPage from "./pages/cart";
 
 const AppRouter = () => (
   
@@ -35,6 +35,7 @@ const AppRouter = () => (
           <Route path="/register" element={<RegisterBuyer />} />
           <Route path="/register/vendor" element={<RegisterVendor />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout/complete-payment/:order_record_id" element={<CompleteCheckOutPayment />} />
 

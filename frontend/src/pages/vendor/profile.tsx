@@ -7,38 +7,15 @@ import {
   SettingsTab
 } from "../../components/vendor"
 import { Button } from "../../components/ui/button"
+import type { kycAttribute } from "@shared/types/kyc"
 
-// Mock vendor profile data
-const vendorProfileData = {
-  businessName: "Lagos Wholesale Hub",
-  email: "contact@lagoswholesale.com",
-  phone: "08012345678",
-  address: "123 Victoria Island, Lagos, Nigeria",
-  description: "Premium wholesale supplier of grains, legumes, and fresh produce. Serving Lagos businesses with quality products at competitive prices.",
-  logo: "/placeholder.svg",
-  kycStatus: "verified" as const, // "verified" | "pending" | "rejected"
-  bankDetails: {
-    bankName: "First Bank of Nigeria",
-    accountNumber: "1234567890",
-    accountName: "LAGOS WHOLESALE HUB"
-  },
-  kycInfo: {
-    fullName: "John Doe",
-    bvn: "12345678901",
-    idNumber: "NIN12345678901",
-    idType: "NIN"
-  },
-  notificationPreferences: {
-    emailOrders: true,
-    smsOrders: true
-  }
-}
+
 
 type ProfileTab = 'business' | 'verification' | 'settings'
 
 export default function VendorProfile() {
   const [activeTab, setActiveTab] = useState<ProfileTab>('business')
-  const [profileData, setProfileData] = useState(vendorProfileData)
+  const [profileData] = useState<kycAttribute|null>(null)
   const navigate = useNavigate()
 
   const handleUploadDocument = (documentType: string, file: File) => {
@@ -51,10 +28,6 @@ export default function VendorProfile() {
 
   const handleUpdateNotifications = (preferences: any) => {
     console.log('Updating notifications:', preferences)
-    setProfileData(prev => ({ 
-      ...prev, 
-      notificationPreferences: { ...prev.notificationPreferences, ...preferences } 
-    }))
   }
 
   const handleLogout = () => {
@@ -70,15 +43,17 @@ export default function VendorProfile() {
       case 'business':
         return (
           <BusinessProfileTab
-          // @ts-expect-error
             profileData={profileData}
+            // @ts-expect-error
             bankDetails={profileData.bankDetails}
           />
         )
       case 'verification':
         return (
           <VerificationTab
-            kycStatus={profileData.kycStatus}
+          // @ts-expect-error
+          kycStatus={profileData.kycStatus}
+          // @ts-expect-error
             kycInfo={profileData.kycInfo}
             onUploadDocument={handleUploadDocument}
           />
@@ -86,6 +61,7 @@ export default function VendorProfile() {
       case 'settings':
         return (
           <SettingsTab
+          // @ts-expect-error
             notificationPreferences={profileData.notificationPreferences}
             onChangePassword={handleChangePassword}
             onUpdateNotifications={handleUpdateNotifications}

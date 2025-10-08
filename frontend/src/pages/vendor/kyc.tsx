@@ -990,12 +990,12 @@ export default function KYCPage() {
 
   const renderStep = () => {
     switch(currentStep) {
-      case 1: return <RenderStep1 />
-      case 2: return <RenderStep2 />
-      case 3: return <RenderStep3 />
-      case 4: return <RenderStep4 />
-      case 5: return <RenderStep5 />
-      default: return <RenderStep1 />
+      case 1: return <RenderStep1 />;
+      case 2: return <RenderStep2 />;
+      case 3: return <RenderStep3 />;
+      case 4: return <RenderStep4 />;
+      case 5: return <RenderStep5 />;
+      default: return <RenderStep1 />;
     }
   }
 

@@ -198,15 +198,15 @@ export default function ProductDetailPage() {
               <CardContent className="space-y-3 text-sm">
                 <div className="flex items-center gap-3 text-muted-foreground">
                     <Store className="h-5 w-5"/>
-                    <span>Sold by <span className="font-semibold text-foreground">{product.user.firstname}</span></span>
+                    <span>Sold by <span className="font-semibold text-foreground">{ product.user.kyc_business?.business_name }</span></span>
                 </div>
                   <div className="flex items-center gap-3 text-muted-foreground">
                     <Phone className="h-5 w-5"/>
-                    <a href={`tel:${product.user.lastname}`} className="font-semibold text-foreground hover:underline">{product.user.lastname}</a>
+                    <a href={`tel:${product.user.kyc_business?.business_phone_number}`} className="font-semibold text-foreground hover:underline">{product.user.kyc_business?.business_phone_number}</a>
                 </div>
                   <div className="flex items-center gap-3 text-muted-foreground">
                     <Mail className="h-5 w-5"/>
-                    <a href={`mailto:${product.user.email}`} className="font-semibold text-foreground hover:underline">{product.user.email}</a>
+                    <a href={`mailto:${product.user.kyc_business?.business_email}`} className="font-semibold text-foreground hover:underline">{product.user.kyc_business?.business_email}</a>
                 </div>
                   <div className="flex items-center gap-3 text-muted-foreground">
                     <CalendarDays className="h-5 w-5"/>

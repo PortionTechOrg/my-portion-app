@@ -6,7 +6,7 @@ import {
 } from "../../components/vendor"
 import KycApi from "@/api/vendor/kyc";
 import type { UserAttributes } from "@shared/types/user";
-import type { kycDetails } from "@shared/types/kyc";
+import type { kycAttribute } from "@shared/types/kyc";
 
 
 export default function DashboardProfilePage() {
@@ -19,7 +19,7 @@ export default function DashboardProfilePage() {
   }
   
 
-  const [ vendorKycDetails, setVendorKycDetails ] = useState<kycDetails | null>(null);
+  const [ vendorKycDetails, setVendorKycDetails ] = useState<kycAttribute | null>(null);
 
   const { getKycDetails } = KycApi()
 

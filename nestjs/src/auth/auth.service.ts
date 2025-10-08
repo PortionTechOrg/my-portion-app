@@ -10,6 +10,10 @@ import { refreshTokenResponse } from '../../../shared/types/services';
 import { MailerService } from 'src/mailer/mailer.service';
 import { ConfigService } from '@nestjs/config';
 import { Wallet } from 'src/database/models/Wallet';
+import { KycPersonal } from 'src/database/models/KycPersonal';
+import { KycIdVerification } from 'src/database/models/KycIdVerification';
+import { KycBusiness } from 'src/database/models/KycBusiness';
+import { KycBusinessDocs } from 'src/database/models/KycBusinessDocs';
 
 
 @Injectable()
@@ -55,7 +59,7 @@ export class AuthService {
     const jwtSecret = this.configService.get('ACCESSTOKENSECRET');
     const jwtSecretRefresh = this.configService.get('REFRESHTOKENSECRET');
 
-    const user = await User.findOne({ where: { email: loginDto.email } });
+    const user = await User.findOne({ where: { email: loginDto.email }, include: [KycPersonal, KycIdVerification, KycBusiness, KycBusinessDocs] });
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }

@@ -9,7 +9,8 @@ import {
   Unique, // Import Unique for unique constraints
   CreatedAt,
   UpdatedAt,
-  DeletedAt
+  DeletedAt,
+  BelongsTo
 } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 import { CreationOptional } from 'sequelize';
@@ -76,5 +77,8 @@ export class KycBusiness extends Model<KycBusinessAttribute> implements KycBusin
   declare updatedAt: CreationOptional<Date>; // Use CreationOptional for auto-managed dates
 
   @DeletedAt
-  declare deletedAt?: Date; // It's optional because it's only set on soft delete
+  declare deletedAt?: Date;
+
+  @BelongsTo(() => User, { foreignKey: 'user_id', as: 'user' })
+  declare user?: User;
 }

@@ -36,6 +36,7 @@ apiPrivate.interceptors.response.use(
             prevRequest.sent = true;
             const res = await api.post(`/auth/refresh`, { refreshToken });
             const newToken = res.data.data.token;
+            useAuthStore.setState({ token: newToken })
             prevRequest.headers['Authorization'] = `Bearer ${newToken}`;
             return api(prevRequest);
         }

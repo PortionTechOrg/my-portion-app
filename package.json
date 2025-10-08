@@ -25,6 +25,8 @@
     "dev:backend": "npm run start:dev --workspace nestjs",
     "migrate": "npm run migrate --workspace nestjs",
     "migrate:undo": "npm run migrate:undo --workspace nestjs",
+    "migrate:seed:undo": "npm run migrate:seed:undo --workspace nestjs",
+    "migrate:seed:all": "npm run migrate:seed:all --workspace nestjs",
     "migrate:undo:all": "npm run migrate:undo:all --workspace nestjs",
     "migrate:skeleton": "npm run migrate:skeleton --workspace nestjs"
   },

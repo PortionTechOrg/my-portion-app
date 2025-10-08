@@ -13,6 +13,8 @@
     "migrate:undo": "dotenv -- sequelize-cli db:migrate:undo",
     "migrate:undo:all": "dotenv -- sequelize-cli db:migrate:undo:all",
     "start:prod": "node .",
+    "migrate:seed:all": "dotenv -- sequelize-cli db:seed:all",
+    "migrate:seed:undo": "dotenv -- sequelize-cli db:seed:undo",
     "migrate:skeleton": "dotenv -- sequelize-cli migration:generate --name migration-skeleton"
   },
   "keywords": [],

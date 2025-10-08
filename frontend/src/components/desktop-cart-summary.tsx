@@ -67,7 +67,7 @@ export function DesktopCartSummary() {
                 <p>{formatPrice(total)}</p>
                 </div>
                  <Button asChild size="lg" className="w-full">
-                  <Link to="/checkout">
+                  <Link to="/cart">
                     Proceed to Checkout <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>

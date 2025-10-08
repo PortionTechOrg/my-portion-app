@@ -26,8 +26,10 @@ export default function useCompleteKyc(){
         setIsLoading(true)
 
         const response = await submitKyc(value)
+        if(response.success){
+            navigate('/dashboard')
+        }
         toast.success(response.message);
-        navigate('/vendor')
     
         setIsLoading(false)
     }

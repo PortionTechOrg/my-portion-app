@@ -4,6 +4,7 @@ import { useCartStore } from '@/zustand/store';
 import { ShoppingCart } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
+import { formatCurrency } from '@/lib/utils';
 
 export function FloatingCartButton() {
   const { cartItems, toggleCartSidebar } = useCartStore();
@@ -20,10 +21,6 @@ export function FloatingCartButton() {
     0
   );
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(price / 100);
-  }
-
   if (!isClient || totalUniqueItems === 0 || !isMobile) {
     return null;
   }
@@ -39,7 +36,7 @@ export function FloatingCartButton() {
                 <ShoppingCart className="h-4 w-4" />
                 <span>{totalUniqueItems} Item{totalUniqueItems > 1 ? 's' : ''}</span>
             </div>
-            <span>View Cart ({formatPrice(subtotal)})</span>
+            <span>View Cart ({formatCurrency(subtotal)})</span>
         </div>
       </Button>
     </div>

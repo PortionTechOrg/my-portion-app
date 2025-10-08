@@ -5,7 +5,7 @@ import { KycIdVerification } from 'src/database/models/KycIdVerification';
 import { KycPersonal } from 'src/database/models/KycPersonal';
 import { User } from 'src/database/models/User';
 
-import { kycDetails } from '@shared/types/kyc';
+import { kycAttribute } from '@shared/types/kyc';
 import { VendorKycDTO } from '@shared/validation/vendor-kyc-schema';
 
 import fs  from 'fs';
@@ -17,23 +17,22 @@ export class VendorService {
 
     constructor(private readonly cloudinary: CloudinaryService) {} 
 
-    async submitKyc(user_id: string, file: any, KycDTO: VendorKycDTO) {
+    async submitKyc(user_id: string, files: any, KycDTO: VendorKycDTO) {
         
         const { cloudinary, cloudinaryUploadFolder } = this.cloudinary.getCloudinary()
 
         let result;
      
-        // @ts-expect-error
         const id_front_url_path = files.id_front[0].path
-        // @ts-expect-error
+        
         const id_back_url_path = files.id_back ? files.id_back[0].path : null
-        // @ts-expect-error
+        
         const passport_url_path = files.passport ? files.passport[0].path : null
-        // @ts-expect-error
+        
         const utility_bill_url_path = files.utility_bill ? files.utility_bill[0].path : null
-        // @ts-expect-error
+        
         const cac_certificate_url_path = files.cac_certificate ? files.cac_certificate[0].path : null
-        // @ts-expect-error
+        
         const tax_certificate_url_path = files.tax_certificate ? files.tax_certificate[0].path : null
         
 
@@ -137,7 +136,7 @@ export class VendorService {
         };
     }
 
-    async getKycDetails(user_id: string) {
+    async getkycAttribute(user_id: string) {
 
         const personal = await KycPersonal.findOne({
           where: {
@@ -163,11 +162,11 @@ export class VendorService {
           }
      })
 
-     const kyc: Partial<kycDetails> = {}
-     kyc.personal = personal
-     kyc.business = business
-     kyc.docs = docs
-     kyc.id = id
+     const kyc: Partial<kycAttribute> = {}
+     kyc.kyc_personal = personal
+     kyc.kyc_business = business
+     kyc.kyc_business_docs = docs
+     kyc.kyc_id_verification = id
     }
 
 }

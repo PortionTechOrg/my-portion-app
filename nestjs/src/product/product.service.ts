@@ -10,6 +10,10 @@ import { Order } from 'src/database/models/Order';
 import { User } from 'src/database/models/User';
 import { AddressAndCartSchema } from '@shared/validation/check-out-schema';
 import { Notification } from 'src/database/models/Notification';
+import { KycBusiness } from 'src/database/models/KycBusiness';
+import { KycBusinessDocs } from 'src/database/models/KycBusinessDocs';
+import { KycIdVerification } from 'src/database/models/KycIdVerification';
+import { KycPersonal } from 'src/database/models/KycPersonal';
 
 
 @Injectable()
@@ -69,15 +73,30 @@ export class ProductService {
     }
     
     async getProductById(id: string) {
-        const product = await Product.findOne({ where: { id }, include: [User] });
+        const product = await Product.findOne({
+            where: { id },
+            include: [
+            {
+                model: User,
+                include: [
+                { model: KycBusiness },
+                { model: KycBusinessDocs },
+                { model: KycIdVerification },
+                { model: KycPersonal },
+                ],
+            },
+            ],
+        });
 
         return {
             success: true,
             data: product,
-            message: `Product id: ${product?.id}`
+            message: product
+            ? `Product id: ${product.id}`
+            : `Product not found with id: ${id}`,
         };
-        
-    }
+        }
+
     
     async addNewProduct(user: UserAttributes, productDto: CreateProductDTO,  files: { image_url?: Express.Multer.File[], video_url?: Express.Multer.File[] }) {
         

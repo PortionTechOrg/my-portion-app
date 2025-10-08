@@ -20,8 +20,6 @@ export default function FeaturedProductedPage() {
 
   const { toggleCartSidebar, isSideBarOpen } = useCartStore()
   
-  const cities = ["All Locations", ...Array.from(new Set(products.map(p => p.location)))];
-
   const product = selectedProduct
     
       const handleAddToCart = () => {

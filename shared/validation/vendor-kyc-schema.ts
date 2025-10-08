@@ -33,5 +33,15 @@ export const vendorKycSchema = z.object( {
     tax_certificate:  z.file(),
 })
 
+export const vendorKycSchemaWithoutFiles = vendorKycSchema.omit({
+  id_front: true,
+  id_back: true,
+  passport: true,
+  utility_bill: true,
+  cac_certificate: true,
+  tax_certificate: true,
+});
+
+
 export type VendorKycSchema = z.infer<typeof vendorKycSchema>
 export type VendorKycDTO = z.infer<typeof vendorKycSchema>

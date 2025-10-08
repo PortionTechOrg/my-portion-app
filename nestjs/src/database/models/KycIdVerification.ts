@@ -8,15 +8,14 @@ import {
   ForeignKey,
   CreatedAt, // Import CreatedAt for explicit createdAt column
   UpdatedAt, // Import UpdatedAt for explicit updatedAt column
-  DeletedAt // Import DeletedAt for explicit deletedAt column (if using paranoid)
+  DeletedAt, // Import DeletedAt for explicit deletedAt column (if using paranoid)
+  BelongsTo
 } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 import { CreationOptional } from 'sequelize';
 
-// Import your shared types
 import { KycIdVerificationAttribute } from '@shared/types/kyc-id-verification';
 
-// Import related models for ForeignKey decorators (adjust paths as needed)
 import { User } from './User'; // Assuming your User model is in './User.ts'
 
 @Table({
@@ -65,5 +64,8 @@ export class KycIdVerification extends Model<KycIdVerificationAttribute> impleme
   declare updatedAt: CreationOptional<Date>; // Use CreationOptional for auto-managed dates
 
   @DeletedAt
-  declare deletedAt?: Date; // It's optional because it's only set on soft delete
+  declare deletedAt?: Date;
+
+  @BelongsTo(() => User, { foreignKey: 'user_id', as: 'user' })
+  declare user?: User;
 }

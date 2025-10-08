@@ -1,5 +1,5 @@
 import { api, apiPrivate } from "@/api/temp-config";
-import type { ProductWithuser } from "@shared/types/product";
+import type { ProductWithuser, ProductWithUserAndKyc } from "@shared/types/product";
 import type { ProductSchema } from "@shared/validation/product-schema";
 import toast from "react-hot-toast";
 import type { StateCreator } from "zustand";
@@ -7,9 +7,9 @@ import type { StateCreator } from "zustand";
 export interface ProductState {
     loading: boolean,
     error: string | null,
-    products: ProductWithuser[],
+    products: ProductWithUserAndKyc[],
     user_products: ProductWithuser[],
-    selectedProduct: ProductWithuser | null,
+    selectedProduct: ProductWithUserAndKyc | null,
 
     clearSelectedProduct: () => void,
 

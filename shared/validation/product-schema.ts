@@ -28,7 +28,7 @@ export const createProductSchema = z.object( {
     video_url: z.file('Select Video file').optional(),
     total_quantity: z.string(),
     quantity_unit: z.string(),
-    number_per_portion: z.string(),
+    number_per_portion: z.number(),
     portion_size: z.string().min(1, 'Must be atleast 1').optional(),
     price_per_portion: z.string().optional(),
     available_portions: z.string().optional(),
