@@ -5,7 +5,7 @@ import RegisterVendor from "./pages/register-vendor";
 import HomePage from "./pages/home";
 import MarketPlace from "./pages/dashboard";
 import OrdersPage from "./pages/orders";
-import DashboardPage from "./pages/vendor/vendor";
+import DashboardPage from "./pages/vendor/dashboard";
 import KYCPage from "./pages/vendor/kyc";
 import ProtectedRoutes from "./hooks/protected-routes";
 import Checkout from "./pages/check-out";

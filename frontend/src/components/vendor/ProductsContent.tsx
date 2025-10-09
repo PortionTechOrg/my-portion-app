@@ -25,7 +25,7 @@ const ProductsContent = ({
   }
 
   const { data: { user_products } } = useProductState()
-  useFetchUserProduct()
+  // useFetchUserProduct()
 
   return (
     <div className="space-y-6">

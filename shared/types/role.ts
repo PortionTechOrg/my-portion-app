@@ -1,1 +1,0 @@
-export type Role = "vendor" | "user" | "admin" | "subadmin";

@@ -29,8 +29,10 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(createUserDto.password, 10);
     const user = await User.create({ 
       firstname: createUserDto.firstname, 
-      lastname: createUserDto.lastname, 
+      lastname: createUserDto.lastname,
+      phone_number: createUserDto.phone_number, 
       email: createUserDto.email,
+      kyc_status: "not_submitted",
       password: passwordHash,
       role: createUserDto.role,
       email_verified: false,
@@ -74,6 +76,7 @@ export class AuthService {
     });
     const token = sign(user.toJSON(), jwtSecret, { expiresIn: '1h' });
     const refreshToken = sign(user.toJSON(), jwtSecretRefresh, { expiresIn: '1d' });
+    console.log(user)
     return { success: true, data: { token, refreshToken, user }, message: "Login Successful" };
   }
 

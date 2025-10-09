@@ -1,5 +1,5 @@
 import type { loginProps } from "@/types/api-response-type";
-import type { UserAttributes } from "@shared/types/user";
+import type { UserWithKycAttributes } from "@shared/types/product";
 import type { StateCreator } from "zustand";
 
 export type AuthState = {
@@ -10,7 +10,7 @@ export type AuthState = {
     refreshToken: string;
     isLoggedIn:boolean,
     isLoading:boolean,
-    user: UserAttributes | null,
+    user: UserWithKycAttributes | null,
     role: string;
 }
 
@@ -23,7 +23,7 @@ export const createAuthSlice: StateCreator<
 > = (set) => ({
 
     loginAuth: ({ token, refreshToken, user}) => {
-        set({ token, refreshToken, role: user?.role, isLoggedIn: true, user })
+        set({ token, refreshToken, role: user?.role, isLoggedIn: true, user: user,  })
     },
     logoutAuth: () => {
         set({ token: '', refreshToken: '', isLoggedIn: false, role: '', user: null })

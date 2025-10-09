@@ -40,9 +40,11 @@ import { Transaction } from './database/models/Transaction';
 import { Notification } from './database/models/Notification';
 import { NotificationModule } from './notification/notification.module';
 import { GlobalModule } from './global/global.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     SequelizeModule.forFeature([Bank, KycBusiness, KycBusinessDocs, Transaction, Notification, KycIdVerification, KycPersonal, OrderRecord, Order, Product, Rating, SellerKyc, User, Wallet,  ]),
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),

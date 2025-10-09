@@ -3,6 +3,7 @@ import { z } from "zod";
 export const createUserSchema = z.object({
   firstname: z.string().min(3, 'Firstname too short!'),
   lastname: z.string().min(3, 'Lastname too short!'),
+  phone_number: z.string().min(11, 'Must be 11 digits longs'),
   email: z.string().email('Enter valid email'),
   role: z.enum(['vendor', 'user', 'admin', 'subadmin']),
   password: z.string().min(6, 'Password must be at least 6 characters').max(100, 'Password is too long'),

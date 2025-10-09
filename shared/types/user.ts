@@ -1,4 +1,4 @@
-import type { Role } from "./role";
+import { Kyc_Status, Roles } from "@shared/enums";
 
 export interface UserAttributes {
     id?: string;
@@ -6,8 +6,11 @@ export interface UserAttributes {
     firstname: string;
     lastname: string;
     email: string;
+    date_of_birth?: string,
+    phone_number: string,
     password: string;
-    role: Role;
+    role: Roles;
+    kyc_status: Kyc_Status;
     email_verified: Boolean;
     kyc_verified: Boolean;
 

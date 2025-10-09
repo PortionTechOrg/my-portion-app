@@ -27,7 +27,7 @@ export default function useCompleteKyc(){
 
         const response = await submitKyc(value)
         if(response.success){
-            navigate('/dashboard')
+            // navigate('/dashboard')
         }
         toast.success(response.message);
     

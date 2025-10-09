@@ -1,4 +1,3 @@
-import { Role } from '@shared/types/role';
 import { UserAttributes } from '@shared/types/user';
 import { Column, Model, Table, AllowNull, PrimaryKey, Default, DataType, BeforeCreate, HasMany, HasOne } from 'sequelize-typescript';
 import { Order } from './Order';
@@ -6,6 +5,7 @@ import { KycPersonal } from './KycPersonal';
 import { KycIdVerification } from './KycIdVerification';
 import { KycBusinessDocs } from './KycBusinessDocs';
 import { KycBusiness } from './KycBusiness';
+import { Kyc_Status, Roles } from '@shared/enums';
 
 @Table( {
   tableName: 'user',
@@ -41,6 +41,16 @@ export class User extends Model<UserAttributes> implements UserAttributes {
     allowNull: false,
   })
   lastname!: string;
+
+  @Column( {
+    allowNull: true,
+  })
+  phone_number!: string;
+
+  @Column( {
+    allowNull: true,
+  })
+  date_of_birth!: string;
   
   // Assuming 'email' is a string type for an email address, not a boolean
   @Column({ 
@@ -63,7 +73,16 @@ export class User extends Model<UserAttributes> implements UserAttributes {
       isIn: [['user', 'vendor', 'admin', 'subadmin']], 
     }
   })
-  role!: Role;
+  role!: Roles;
+
+  @Column({ 
+    allowNull: false,
+    validate: {
+
+      isIn: [Object.values(Kyc_Status)], 
+    }
+  })
+  kyc_status!: Kyc_Status;
 
   @Column({ 
     allowNull: false,

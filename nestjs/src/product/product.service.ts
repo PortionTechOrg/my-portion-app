@@ -51,7 +51,12 @@ export class ProductService {
 
     async getUserProducts ( user: UserAttributes, limit: number, page: number) {
 
-        const productCount = await Product.count({ paranoid: true });
+        const productCount = await Product.count({
+            where: {
+                seller_id: user.id
+            },
+            paranoid: true,
+         });
         const start = (Number(page) - 1) * Number(limit);
 
         const product = await Product.findAll({
