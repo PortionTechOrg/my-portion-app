@@ -5,6 +5,7 @@ import {
 } from "../../components/vendor"
 import { useNotificactionState, } from "@/zustand/hooks/notification/notification.hook"
 import { formatDate } from "@/lib/utils"
+import { useFetchUser } from "@/zustand/hooks/user/user.hook"
 
 
 export default function DashboardNotificationPage() {
@@ -14,6 +15,9 @@ export default function DashboardNotificationPage() {
   const handleSaveDraft = (productData: any) => {
     console.log('Save draft:', productData)
   }
+
+  useFetchUser();
+  
 
   const { data: { notifications } } = useNotificactionState()
   return (

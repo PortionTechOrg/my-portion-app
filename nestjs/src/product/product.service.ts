@@ -127,7 +127,7 @@ export class ProductService {
           seller_id: String(user.id),
           name: productDto.name,
           status: 'pending',
-          number_per_portion: productDto.number_per_portion,
+          number_per_portion: Number(productDto.number_per_portion),
      
           description: productDto.description || '',
           image_url,

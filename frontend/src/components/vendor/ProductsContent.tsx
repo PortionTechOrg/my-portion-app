@@ -3,7 +3,8 @@ import { useState } from "react"
 import { VendorProductCard } from "../shared/ProductCard"
 import ProductDetailsModal from "./ProductDetailsModal"
 import type { ProductAttribute } from "@shared/types/product"
-import { useProductState } from "@/zustand/hooks/product/product.hook"
+import { useFetchUserProduct, useProductState } from "@/zustand/hooks/product/product.hook"
+import { useFetchUser } from "@/zustand/hooks/user/user.hook"
 
 interface ProductsContentProps {
   onAddProduct: () => void
@@ -25,7 +26,9 @@ const ProductsContent = ({
   }
 
   const { data: { user_products } } = useProductState()
-  // useFetchUserProduct()
+  useFetchUserProduct()
+  useFetchUser();
+  
 
   return (
     <div className="space-y-6">

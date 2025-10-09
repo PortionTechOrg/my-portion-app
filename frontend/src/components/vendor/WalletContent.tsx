@@ -6,7 +6,7 @@ import { useFetchWallet, useWalletState } from "@/zustand/hooks/wallet/wallet.ho
 import { Link } from "react-router-dom"
 import { useFetchTransactions, useTransactionState } from "@/zustand/hooks/transaction/transaction.hook"
 import { formatDate } from "@/lib/utils"
-import { useUserState } from "@/zustand/hooks/user/user.hook"
+import { useFetchUser, useUserState } from "@/zustand/hooks/user/user.hook"
 
 interface WalletContentProps {
   bankDetails: {
@@ -31,6 +31,8 @@ const WalletContent = ({
   const { data: { main_balance } } = useWalletState()
   const  { data: { user }} = useUserState()
   useFetchWallet();
+  useFetchUser();
+  
 
   const handleWithdraw = async (amount: number) => {
     try {

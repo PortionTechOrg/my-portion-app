@@ -8,6 +8,7 @@ import {
 } from "../../components/vendor"
 import { Button } from "../../components/ui/button"
 import type { kycAttribute } from "@shared/types/kyc"
+import { useFetchUser } from "@/zustand/hooks/user/user.hook"
 
 
 
@@ -38,6 +39,8 @@ export default function VendorProfile() {
     navigate('/vendor')
   }
 
+  useFetchUser();
+  
   const renderTabContent = () => {
     switch(activeTab) {
       case 'business':

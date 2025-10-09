@@ -11,7 +11,7 @@ import toast from "react-hot-toast"
 import { Link } from "react-router-dom"
 import { KycReadOnlyView } from "@/components/kyc-view-mode"
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
-import { useUserState } from "@/zustand/hooks/user/user.hook"
+import { useFetchUser, useUserState } from "@/zustand/hooks/user/user.hook"
 
 interface KYCFormData {
   // Personal Information
@@ -120,6 +120,8 @@ export default function KYCPage() {
   }
 
   const { data: { user } } = useUserState()
+  useFetchUser();
+  
 
   const RenderStep1 = () => (
     <div className="space-y-6">
