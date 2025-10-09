@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Status } from '@shared/enums';
 import { Order } from 'src/database/models/Order';
-import { OrderRecord } from 'src/database/models/order-record';
 import { Product } from 'src/database/models/Product';
 import { User } from 'src/database/models/User';
 

@@ -7,7 +7,7 @@ export interface UserAttributes {
     lastname: string;
     email: string;
     date_of_birth?: string,
-    phone_number: string,
+    phone_number: string | null,
     password: string;
     role: Roles;
     kyc_status: Kyc_Status;

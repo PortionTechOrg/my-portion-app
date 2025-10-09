@@ -3,10 +3,10 @@ import { DollarSign, CreditCard, TrendingUp, CheckCircle, Clock } from "lucide-r
 import { Button } from "../ui/button"
 import WithdrawFundsModal from "./WithdrawFundsModal"
 import { useFetchWallet, useWalletState } from "@/zustand/hooks/wallet/wallet.hook"
-import { useAuthStore } from "@/zustand/store"
 import { Link } from "react-router-dom"
 import { useFetchTransactions, useTransactionState } from "@/zustand/hooks/transaction/transaction.hook"
 import { formatDate } from "@/lib/utils"
+import { useUserState } from "@/zustand/hooks/user/user.hook"
 
 interface WalletContentProps {
   bankDetails: {
@@ -29,7 +29,7 @@ const WalletContent = ({
   
   
   const { data: { main_balance } } = useWalletState()
-  const  { user } = useAuthStore()
+  const  { data: { user }} = useUserState()
   useFetchWallet();
 
   const handleWithdraw = async (amount: number) => {

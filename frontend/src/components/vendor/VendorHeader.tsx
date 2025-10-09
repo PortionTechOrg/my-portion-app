@@ -1,7 +1,7 @@
-import { useAuthStore } from "@/zustand/store";
+import { useUserState } from "@/zustand/hooks/user/user.hook";
 
 const VendorHeader = () => {
-  const { user } = useAuthStore();
+  const { data: { user } } = useUserState();
   
   return (
     <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">

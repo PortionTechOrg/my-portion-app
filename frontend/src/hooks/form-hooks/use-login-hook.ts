@@ -6,7 +6,7 @@ import type { LoginSchema } from '@shared/validation/loginUserDTO'
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAuthStore } from "@/zustand/store";
+import { useAuthStore, useUserStore } from "@/zustand/store";
 
 export default function useLogin() {
 
@@ -32,15 +32,15 @@ export default function useLogin() {
             toast.success(response.message)
 
             loginAuth(response.data);
+            useUserStore.setState({ user: response.data.user })
+
             // @ts-expect-error
-            if(response.data.user.role == 'vendor'){
-                
-                if(response.data.user?.kyc_verified){
+            if(response.data.user.role == 'vendor'){                
+                if(response.data.user?.kyc_status == "not_submitted" || response.data.user?.kyc_status == "rejected"){
+                    navigate('/dashboard/kyc')
+                }else {
                     console.log(response.data.user?.kyc_verified)
                     navigate('/dashboard')
-                }else {
-                    navigate('/dashboard/kyc')
-                    
                 }
             }else{
                 navigate('/')

@@ -5,8 +5,6 @@ import {
 } from "../../components/vendor"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Banknote, Building, ShieldAlert, User } from "lucide-react";
-import { useAuthStore } from "@/zustand/store";
-import { Button } from "@/components/ui/button";
 import type { Kyc_Status } from "@shared/enums";
 import { Kyc_Status as KYC_STATUS } from "@shared/enums";
 import { Link } from "react-router-dom";
@@ -15,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import toast from "react-hot-toast";
+import { useUserState } from "@/zustand/hooks/user/user.hook";
+import { Button } from "@/components/ui/button";
 
 
 function InfoField({ label, value }: { label: string, value: string | undefined }) {
@@ -42,7 +42,7 @@ export default function DashboardProfilePage() {
 
   const [isBankDialogOpen, setIsBankDialogOpen] = useState(false);
 
-  const { user } = useAuthStore()
+  const { data: { user } } = useUserState()
 
   const [bankDetails, setBankDetails] = useState<BankDetails | null>(null);
 
@@ -102,8 +102,7 @@ export default function DashboardProfilePage() {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <InfoField label="Email" value={user?.email || "Not Set"} />
-                            {/* @ts-expect-error */}
-                            <InfoField label="Phone Number" value={user?.phone || "Not Set"} />
+                            <InfoField label="Phone Number" value={user?.kyc_personal?.phone_number || "Not Set"} />
                       </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <InfoField label="BVN" value={user?.kyc_personal?.bvn || "Not Set"} />

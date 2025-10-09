@@ -9,7 +9,9 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import useCompleteKyc from "@/hooks/form-hooks/use-complete-kyc-hook"
 import toast from "react-hot-toast"
 import { Link } from "react-router-dom"
-import { useAuthStore } from "@/zustand/store"
+import { KycReadOnlyView } from "@/components/kyc-view-mode"
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
+import { useUserState } from "@/zustand/hooks/user/user.hook"
 
 interface KYCFormData {
   // Personal Information
@@ -69,6 +71,20 @@ const idTypes = [
   "Permanent Voter's Card (PVC)"
 ]
 
+function KycStatusDisplayMessage() {
+  const { data: { user } } = useUserState()
+  return (
+    <CardHeader className="p-0">
+              <CardDescription>
+                {user?.kyc_status === 'rejected' 
+                  ? "Your previous submission was rejected. Please review and correct your information."
+                  : "Please provide the following information."
+                }
+              </CardDescription>
+            </CardHeader>
+  )
+}
+
 export default function KYCPage() {
   const [formData, setFormData] = useState<KYCFormData>({
     firstName: "",
@@ -103,7 +119,7 @@ export default function KYCPage() {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
-  const { user } = useAuthStore()
+  const { data: { user } } = useUserState()
 
   const RenderStep1 = () => (
     <div className="space-y-6">
@@ -113,7 +129,7 @@ export default function KYCPage() {
           Personal Information
         </h3>
         <p className="text-sm text-gray-600 mb-6">
-          Please provide your personal details for verification.
+          <KycStatusDisplayMessage />
         </p>
       </div>
 
@@ -311,7 +327,7 @@ export default function KYCPage() {
           Business Information
         </h3>
         <p className="text-sm text-gray-600 mb-6">
-          Please provide your business details for verification.
+          <KycStatusDisplayMessage />
         </p>
       </div>
 
@@ -425,7 +441,7 @@ export default function KYCPage() {
           Identity Verification
         </h3>
         <p className="text-sm text-gray-600 mb-6">
-          Please upload your identity documents for verification.
+          <KycStatusDisplayMessage />
         </p>
       </div>
 
@@ -713,7 +729,7 @@ export default function KYCPage() {
           Business Documents
         </h3>
         <p className="text-sm text-gray-600 mb-6">
-          Please upload your business documents for verification.
+          <KycStatusDisplayMessage />
         </p>
       </div>
 
@@ -1050,72 +1066,85 @@ export default function KYCPage() {
       </div>
 
       {/* Main Content */}
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmitKyc)}>
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        <div className="bg-white rounded-lg shadow-sm border">
-          <div className="p-8">
+      <Card>
+        {user?.kyc_status == "verified" || user?.kyc_status == "submitted" ? (
 
-                {renderStep()}
+          <CardContent className='pt-6'>
+              <KycReadOnlyView />
+            </CardContent>
 
-          </div>
+        ): (
+          <>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmitKyc)}>
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          <div className="bg-white rounded-lg shadow-sm border">
+            <div className="p-8">
 
-          {/* Navigation Buttons */}
-          <div className="flex justify-between items-center p-8 border-t border-gray-200">
-            {/* dont change to button */}
-            { currentStep > 1 ? (
-              <div>
-                
-                <div
-              onClick={() => {
-                if(!(currentStep < 2)) {
-                  setCurrentStep(Math.max(1, currentStep - 1))
-                }
-              }}
-              
-              // disabled={currentStep === 1}
-            >
-              Previous
+                  {renderStep()}
+
             </div>
-                </div>
-            ): (
-              <div>
-                {/* <Link
-                  to="/vendor"
-                  className="bg-green-500 hover:bg-green-600 rounded-sm text-white text-sm py-2 px-3"
-                >
-                  Submit KYC
-                </Link> */}
-                <Link to='/dashboard'>
-                  Skip
-                </Link>
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-between items-center p-8 border-t border-gray-200">
+              {/* dont change to button */}
+              { currentStep > 1 ? (
+                <div>
+                  
+                  <div
+                onClick={() => {
+                  if(!(currentStep < 2)) {
+                    setCurrentStep(Math.max(1, currentStep - 1))
+                  }
+                }}
+                
+                // disabled={currentStep === 1}
+              >
+                Previous
               </div>
-            )}
-
-            <div className="flex space-x-3">
-              {currentStep < 5 ? (
-                // dont change to button
-                <div
-                  onClick={handleNextStep}
-                  className="bg-green-500 hover:bg-green-600 py-1 px-3 text-white rounded-sm"
-                >
-                  Next
+                  </div>
+              ): (
+                <div>
+                  {/* <Link
+                    to="/vendor"
+                    className="bg-green-500 hover:bg-green-600 rounded-sm text-white text-sm py-2 px-3"
+                  >
+                    Submit KYC
+                  </Link> */}
+                  <Link to='/dashboard'>
+                    Skip
+                  </Link>
                 </div>
-              ) : (
-
-                  <Button
-                  type="submit"
-                  className="bg-green-500 hover:bg-green-600"
-                >
-                  {isLoading ? "Submitting..." : "Submit KYC"}
-                </Button>
               )}
+
+              <div className="flex space-x-3">
+                {currentStep < 5 ? (
+                  // dont change to button
+                  <div
+                    onClick={handleNextStep}
+                    className="bg-green-500 hover:bg-green-600 py-1 px-3 text-white rounded-sm"
+                  >
+                    Next
+                  </div>
+                ) : (
+
+                    <Button
+                    type="submit"
+                    className="bg-green-500 hover:bg-green-600"
+                  >
+                    {isLoading ? "Submitting..." : "Submit KYC"}
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-              </form>
-            </Form>
+                </form>
+              </Form>
+          </>
+        )}
+      </Card>
     </div>
   )
-} 
+}
+

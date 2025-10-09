@@ -3,7 +3,7 @@ import { useState } from "react"
 import { VendorProductCard } from "../shared/ProductCard"
 import ProductDetailsModal from "./ProductDetailsModal"
 import type { ProductAttribute } from "@shared/types/product"
-import { useFetchUserProduct, useProductState } from "@/zustand/hooks/product/product.hook"
+import { useProductState } from "@/zustand/hooks/product/product.hook"
 
 interface ProductsContentProps {
   onAddProduct: () => void

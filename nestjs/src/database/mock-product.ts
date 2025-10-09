@@ -1,6 +1,4 @@
 import { ProductAttribute } from '@shared/types/product';
-import { UserAttributes } from '@shared/types/user';
-import * as bcrypt from 'bcryptjs';
 
 
 export const mockProductSeed: (response)=> Promise<ProductAttribute[]> = ( async (response: {id: string }[]) => {

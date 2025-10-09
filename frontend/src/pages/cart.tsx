@@ -10,19 +10,19 @@ import { Minus, Plus, Trash2, ArrowRight, ShoppingCart } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useAuthStore,  } from "@/zustand/store";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartState } from "@/zustand/hooks/cart/cart.hook";
 import { formatCurrency } from "@/lib/utils";
 import { Navbar } from "@/components/home/navbar";
 import { SlideMenu } from "@/components/home/slide-menu";
 import { CartSlide } from "@/components/home/cart-slide";
+import { useUserState } from "@/zustand/hooks/user/user.hook";
 
 export default function CartPage() {
     
   const { data: { cartItems, cartCount, removeFromCart,  updateCartItemQuantity, clearCart } } = useCartState();
   const [isClient, setIsClient] = useState(false);
-  const { user } = useAuthStore();
+  const { data: { user } } = useUserState();
   const [searchQuery, setSearchQuery] = useState("")
 const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)

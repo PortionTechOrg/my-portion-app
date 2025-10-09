@@ -30,7 +30,7 @@ export class AuthService {
     const user = await User.create({ 
       firstname: createUserDto.firstname, 
       lastname: createUserDto.lastname,
-      phone_number: createUserDto.phone_number, 
+      // phone_number: null, 
       email: createUserDto.email,
       kyc_status: "not_submitted",
       password: passwordHash,

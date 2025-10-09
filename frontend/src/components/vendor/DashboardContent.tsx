@@ -1,15 +1,16 @@
 import type { ProductAttribute } from "@shared/types/product"
 import { Status } from "@shared/enums"
-import { Package, Plus, Share2, Edit3,Clock, DollarSign, CheckCircle } from "lucide-react"
+import { Package, Plus, Share2, Edit3,Clock, DollarSign, CheckCircle, XCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import WithdrawFundsModal from "./WithdrawFundsModal"
 import WalletApi from "@/api/wallet/wallet-api"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { Button } from "../ui/button"
 import { Link } from "react-router-dom"
-import useAuth from "@/hooks/auth-provider"
 import { cn, formatCurrency } from "@/lib/utils"
 import { useFetchUserProduct, useProductState } from "@/zustand/hooks/product/product.hook"
+import {  useUserStore } from "@/zustand/store"
+import { useFetchUser } from "@/zustand/hooks/user/user.hook"
 
 interface DashboardContentProps {
   dashboardStats: {
@@ -47,7 +48,7 @@ const DashboardContent = ({
 
     const { getWalletBalance } = WalletApi()
 
-    const { user } = useAuth();
+    const { user } = useUserStore();
 
   const hasProducts = user_products?.length > 0
   
@@ -62,6 +63,7 @@ const DashboardContent = ({
   }
 
   useFetchUserProduct()
+  useFetchUser();
   
 
   useEffect(()=>{
@@ -77,11 +79,14 @@ const DashboardContent = ({
 
   }, [])
 
+  console.log(user?.kyc_status)
+
   return (
     <div>
 
       <div>
-        {!user?.kyc_verified && (
+        {user?.kyc_status == "submitted" ? (
+          (
           <Card className="mb-8 bg-yellow-50 border-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-800">
             <CardHeader className="flex flex-row items-center gap-4">
               <Clock className="w-8 h-8 text-yellow-600" />
@@ -91,12 +96,46 @@ const DashboardContent = ({
                   Your vendor application is currently under review. We'll notify you once it's approved. If you haven't completed your KYC, please do so.
                 </CardDescription>
               </div>
+              {/* <Button asChild className="ml-auto">
+                  <Link to="/dashboard/kyc">Complete KYC</Link>
+              </Button> */}
+            </CardHeader>
+          </Card>
+        )
+        ): 
+        user?.kyc_status == "rejected" ? (
+          (
+          <Card className="mb-8 bg-red-50 border-red-200 dark:bg-red-900/30 dark:border-red-800">
+            <CardHeader className="flex flex-row items-center gap-4">
+              <XCircle className="w-8 h-8 text-red-600" />
+              <div>
+                <CardTitle className="text-red-800 dark:text-red-300">Account Application Rejected</CardTitle>
+                <CardDescription className="text-red-700 dark:text-red-400">
+                  Unfortunately, your vendor application was not approved. Please contact support for more information.
+                </CardDescription>
+              </div>
+            </CardHeader>
+          </Card>
+        ))
+        : 
+        user?.kyc_status == "not_submitted" ? (
+          (
+          <Card className="mb-8 bg-yellow-50 border-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-800">
+            <CardHeader className="flex flex-row items-center gap-4">
+              <Clock className="w-8 h-8 text-yellow-600" />
+              <div>
+                <CardTitle className="text-yellow-800 dark:text-yellow-300">Verification Required</CardTitle>
+                <CardDescription className="text-yellow-700 dark:text-yellow-400">
+                  You haven’t submitted your verification documents yet. To become a verified vendor and start selling, please complete your KYC verification.
+                </CardDescription>
+              </div>
               <Button asChild className="ml-auto">
                   <Link to="/dashboard/kyc">Complete KYC</Link>
               </Button>
             </CardHeader>
           </Card>
-        )}
+        ))
+        : null }
 
         {/* { user?.kyc_verified && (
           <Card className="mb-8 bg-red-50 border-red-200 dark:bg-red-900/30 dark:border-red-800">
@@ -119,8 +158,8 @@ const DashboardContent = ({
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(6784783500)}</div>
-            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+            <div className="text-2xl font-bold">{formatCurrency(0)}</div>
+            <p className="text-xs text-muted-foreground">+0% from last month</p>
           </CardContent>
         </Card>
         <Card>
@@ -139,7 +178,7 @@ const DashboardContent = ({
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+1,234</div>
+            <div className="text-2xl font-bold">0</div>
             <p className="text-xs text-muted-foreground">Portions sold this month</p>
           </CardContent>
         </Card>
