@@ -41,6 +41,7 @@ import { Notification } from './database/models/Notification';
 import { NotificationModule } from './notification/notification.module';
 import { GlobalModule } from './global/global.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { BankModule } from './bank/bank.module';
 
 @Module({
   imports: [
@@ -61,7 +62,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     AdminDashboardModule,
     TransactionModule,
     NotificationModule,
-    GlobalModule
+    GlobalModule,
+    BankModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },

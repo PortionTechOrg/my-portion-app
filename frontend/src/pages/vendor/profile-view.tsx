@@ -8,13 +8,15 @@ import { Banknote, Building, ShieldAlert, User } from "lucide-react";
 import type { Kyc_Status } from "@shared/enums";
 import { Kyc_Status as KYC_STATUS } from "@shared/enums";
 import { Link } from "react-router-dom";
-import { Label } from "@radix-ui/react-label";
-import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import toast from "react-hot-toast";
-import { useUserState } from "@/zustand/hooks/user/user.hook";
+import { useFetchUser, useUserState } from "@/zustand/hooks/user/user.hook";
+import useAddBank from "@/hooks/form-hooks/use-add-bank-hook";
+import { FormControl, Form, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { useBankState, useFetchBanks } from "@/zustand/hooks/bank/bank.hook";
 
 
 function InfoField({ label, value }: { label: string, value: string | undefined }) {
@@ -26,39 +28,23 @@ function InfoField({ label, value }: { label: string, value: string | undefined 
     )
 }
 
-type BankDetails = {
-    bankName: string;
-    accountNumber: string;
-    accountName: string;
-}
-
 export default function DashboardProfilePage() {
 
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
 
+  const { form, isLoading, onAddBank } = useAddBank()
   const handleSaveDraft = (productData: any) => {
     console.log('Save draft:', productData)
   }
 
+  const { data: { banks} } = useBankState()
+ 
   const [isBankDialogOpen, setIsBankDialogOpen] = useState(false);
 
   const { data: { user } } = useUserState()
 
-  const [bankDetails, setBankDetails] = useState<BankDetails | null>(null);
-
-
-  const handleBankDetailsSave = (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const formData = new FormData(e.currentTarget);
-      const newDetails: BankDetails = {
-          bankName: formData.get('bankName') as string,
-          accountNumber: formData.get('accountNumber') as string,
-          accountName: formData.get('accountName') as string,
-      };
-      setBankDetails(newDetails);
-      setIsBankDialogOpen(false);
-      toast.success("Bank details saved successfully!");
-  }
+  useFetchBanks()
+  useFetchUser()
 
   const kycStatusConfig: Record<Kyc_Status, { text: string; color: string }> = {
       verified: { text: "Your account is verified.", color: "text-green-600" },
@@ -196,13 +182,23 @@ export default function DashboardProfilePage() {
                     <CardDescription>This is the account where your payouts will be sent.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {bankDetails ? (
-                        <div className="space-y-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <InfoField label="Bank Name" value={bankDetails.bankName} />
-                                <InfoField label="Account Number" value={bankDetails.accountNumber} />
-                            </div>
-                            <InfoField label="Account Name" value={bankDetails.accountName} />
+                    {banks.length > 0 ? (
+                        <div className="flex flex-col gap-4">
+                            {
+                                banks.map( (bank) => {
+                                    return (
+                                        <Card className="space-y-6">
+                                            <CardContent>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                                <InfoField label="Bank Name" value={bank.bank_name} />
+                                                <InfoField label="Account Number" value={bank.account_number} />
+                                            </div>
+                                            <InfoField label="Account Name" value={bank.account_name} />
+                                            </CardContent>
+                                        </Card>
+                                    )
+                                })
+                            }
                         </div>
                     ) : (
                         <div className="text-center py-8 text-muted-foreground">
@@ -214,7 +210,7 @@ export default function DashboardProfilePage() {
                     <Dialog open={isBankDialogOpen} onOpenChange={setIsBankDialogOpen}>
                         <DialogTrigger asChild>
                             <Button variant="outline">
-                                {user ? 'Update Bank Details' : 'Add Bank Details'}
+                                Add Bank Details
                             </Button>
                         </DialogTrigger>
                         <DialogContent>
@@ -224,25 +220,65 @@ export default function DashboardProfilePage() {
                                     Enter your bank account information for payouts.
                                 </DialogDescription>
                             </DialogHeader>
-                            <form onSubmit={handleBankDetailsSave}>
-                                <div className="space-y-4 py-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="bankName">Bank Name</Label>
-                                        <Input id="bankName" name="bankName" defaultValue={bankDetails?.bankName} />
+                            
+                            <Form {...form}>
+                                <form onSubmit={form.handleSubmit(onAddBank)}>
+                                    <div className="space-y-4 py-4">
+                                        <div className="space-y-2">
+                                            <FormField
+                                                control={form.control}
+                                                name="bank_name"
+                                                render={({field}) => (
+                                                    <FormItem>
+                                                        <FormLabel>Bank Name</FormLabel>
+                                                        <FormControl>
+                                                            <Input {...field} />
+                                                        </FormControl>
+                                                        <FormDescription />
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <FormField
+                                                control={form.control}
+                                                name="bank_account_number"
+                                                render={({field}) => (
+                                                    <FormItem>
+                                                        <FormLabel>Account Number</FormLabel>
+                                                        <FormControl>
+                                                            <Input {...field} />
+                                                        </FormControl>
+                                                        <FormDescription />
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <FormField
+                                                control={form.control}
+                                                name="bank_account_name"
+                                                render={({field}) => (
+                                                    <FormItem>
+                                                        <FormLabel>Account Name</FormLabel>
+                                                        <FormControl>
+                                                            <Input {...field} />
+                                                        </FormControl>
+                                                        <FormDescription />
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                                />
+                                        </div>
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="accountNumber">Account Number</Label>
-                                        <Input id="accountNumber" name="accountNumber" defaultValue={bankDetails?.accountNumber} />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="accountName">Account Name</Label>
-                                        <Input id="accountName" name="accountName" defaultValue={bankDetails?.accountName} />
-                                    </div>
-                                </div>
-                                <DialogFooter>
-                                    <Button type="submit">Save Changes</Button>
-                                </DialogFooter>
-                            </form>
+                                    <DialogFooter>
+                                        <Button disabled={isLoading} type="submit">Save Changes</Button>
+                                    </DialogFooter>
+                                </form>
+                                
+                            </Form>
                         </DialogContent>
                     </Dialog>
                 </CardFooter>

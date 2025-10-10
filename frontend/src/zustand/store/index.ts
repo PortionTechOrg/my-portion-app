@@ -11,6 +11,7 @@ import { createTransactionSlice, type TransactionState } from "../slices/transac
 import { createModalsSlice, type ModalState } from "../modal/modal.slice";
 import { createNotificationsSlice, type NotificiationState } from "../slices/notification/notification.slice";
 import { createUserSlice, type UserState } from "../slices/user/user.slice";
+import { createBankSlice, type BankState } from "../slices/bank/bank.slice";
 
 interface GlobalState extends 
 CartItemContextType, 
@@ -64,6 +65,13 @@ export const useWalletStore = create<WalletState
 >()((...a) =>(
 {
     ...createWalletSlice(...a)
+}
+))
+
+export const useBankStore = create<BankState
+>()((...a) =>(
+{
+    ...createBankSlice(...a)
 }
 ))
 
