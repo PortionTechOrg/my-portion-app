@@ -13,8 +13,6 @@ import { useFetchProduct, useProductState } from "@/zustand/hooks/product/produc
 import { CitySelector } from "@/components/city-selector"
 import { Link } from "react-router-dom"
 import { ProductCard } from "../components/home/product-card"
-import { SectionTitle } from "@/components/section/section-title"
-import { Scroller } from "@/components/scroller"
 import { categories } from "@/lib/data"
 
 
@@ -53,8 +51,6 @@ export default function MarketPlace() {
     }
   }, [])
 
-  const featuredProducts = data.products.slice(0, 6);
-  const topDeals = data.products.slice(Math.max(0, featuredProducts.length - 5));
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -76,17 +72,17 @@ export default function MarketPlace() {
         </div>
 
         <div className="container mx-auto py-2 space-y-12">
-          <section id="featured-products">
+          {/* <section id="featured-products">
             <SectionTitle title="Featured" href="/products" />
             <Scroller onAddToCart={handleAddToCart} products={featuredProducts} />
-          </section>
+          </section> */}
 
-          <section id="top-deals">
+          {/* <section id="top-deals">
             <SectionTitle title="Top Deals" href="/products" />
             <Scroller onAddToCart={handleAddToCart} products={topDeals} />
-          </section>
+          </section> */}
 
-          <section id="categories" className="py-12">
+          <section id="categories" className="pt-4">
             <h2 className="font-headline text-2xl font-semibold text-center mb-6">Shop by Category</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
               {categories.map((category) => (
@@ -99,7 +95,7 @@ export default function MarketPlace() {
           </section>
 
           <section id="all-products" className="py-12">
-            <h2 className="font-headline text-3xl font-semibold text-center mb-8">All Products in {selectedCity}</h2>
+            {/* <h2 className="font-headline text-xl font-semibold text-center mb-8">All Products in {selectedCity}</h2> */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
               {data.products.length > 0 ? (
                 data.products.map((product) => (

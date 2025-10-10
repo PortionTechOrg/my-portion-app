@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ShoppingCart, Minus, Plus, MapPin, Scale, Package, Store, Phone, Mail, CalendarDays, ChevronRight } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Scale, Package, Store, CalendarDays, ChevronRight } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -184,10 +184,6 @@ export default function ProductDetailPage() {
                   <Package className="h-5 w-5"/>
                   <span>From a bulk size of <span className="font-semibold text-foreground">{product.total_quantity} {product.quantity_unit}</span></span>
               </div>
-                <div className="flex items-center gap-3 text-muted-foreground">
-                  <MapPin className="h-5 w-5"/>
-                  <span>Ships from <span className="font-semibold text-foreground">{product.location}</span></span>
-              </div>
             </CardContent>
         </Card>
         
@@ -200,14 +196,6 @@ export default function ProductDetailPage() {
                 <div className="flex items-center gap-3 text-muted-foreground">
                     <Store className="h-5 w-5"/>
                     <span>Sold by <span className="font-semibold text-foreground">{ product.user.kyc_business?.business_name }</span></span>
-                </div>
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <Phone className="h-5 w-5"/>
-                    <a href={`tel:${product.user.kyc_business?.business_phone_number}`} className="font-semibold text-foreground hover:underline">{product.user.kyc_business?.business_phone_number}</a>
-                </div>
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <Mail className="h-5 w-5"/>
-                    <a href={`mailto:${product.user.kyc_business?.business_email}`} className="font-semibold text-foreground hover:underline">{product.user.kyc_business?.business_email}</a>
                 </div>
                   <div className="flex items-center gap-3 text-muted-foreground">
                     <CalendarDays className="h-5 w-5"/>

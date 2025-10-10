@@ -25,7 +25,7 @@ const ProductsContent = ({
     setShowDetailsModal(true)
   }
 
-  const { user } = useUserState();
+  const { data: { user} } = useUserState();
 
   const { data: { user_products } } = useProductState()
   useFetchUserProduct()

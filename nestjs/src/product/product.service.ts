@@ -189,7 +189,7 @@ export class ProductService {
 
             const { dataValues} = await OrderRecord.create( {
                 status: "pending",
-                reference: '',
+                reference: JSON.stringify({ street_address: checkoutDTO.street_address, city: checkoutDTO.city, state: checkoutDTO.state }),
                 total_amount: Number(checkoutDTO.cartItems.reduce((total, item) => total + item.price * item.quantity, serviceCharge + shippingCost)) ,
                 user_id,
             }, { transaction: t })

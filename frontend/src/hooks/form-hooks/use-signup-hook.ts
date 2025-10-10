@@ -32,7 +32,13 @@ export default function useSignup(){
         const response = await signUp(value)
         if(response.success){
             toast.success(response.message)
-            navigate('/login');
+
+            if(response.data.user?.role == "vendor"){
+                navigate('/login/vendor');
+
+            }else{
+                navigate('/login');
+            }
         }else {
             toast.error(response.message)
         }

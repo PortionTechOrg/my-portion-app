@@ -22,6 +22,7 @@ import AdminOrdersPage from "./pages/admin/orders";
 import ProductDetailPage from "./pages/product-details";
 import FeaturedProductedPage from "./pages/featured-product-page";
 import CartPage from "./pages/cart";
+import LoginVendorPage from "./pages/login-vendor";
 
 const AppRouter = () => (
   
@@ -32,6 +33,7 @@ const AppRouter = () => (
           <Route path="/products" element={<FeaturedProductedPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/login/vendor" element={<LoginVendorPage />} />
           <Route path="/register" element={<RegisterBuyer />} />
           <Route path="/register/vendor" element={<RegisterVendor />} />
           <Route path="/orders" element={<OrdersPage />} />

@@ -176,23 +176,6 @@ const Checkout: React.FC = () => {
                                 )}
                                 />
                             </div>
-                            <div>
-                              <FormField
-                                control={form.control}
-                                name="zip"
-                                render={({field}) => (
-                                  <FormItem>
-                                    <FormLabel >ZIP Code</FormLabel>
-                                    <FormControl>
-                                      <Input 
-                                        placeholder="10001" {...field} />
-                                    </FormControl>
-                                    <FormDescription />
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                                />
-                            </div>
 
                             { }
                           </div>
