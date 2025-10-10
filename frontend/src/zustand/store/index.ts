@@ -104,7 +104,7 @@ type CityState = {
 export const useCityStore = create<CityState>()(
     persist(
         (set) => ({
-        city: 'All Locations',
+        city: '',
         setCity: (city) => set({ city }),
         }), 
         { name: "city",

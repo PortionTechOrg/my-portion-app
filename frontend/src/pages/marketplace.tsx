@@ -9,24 +9,27 @@ import type { ProductAttribute } from '@shared/types/product'
 import type { CartItem } from "@/types/cart"
 import Footer from "@/components/Layout/footer"
 import { useCartState } from "@/zustand/hooks/cart/cart.hook"
-import { useFetchProduct, useProductState } from "@/zustand/hooks/product/product.hook"
+import { useProductState } from "@/zustand/hooks/product/product.hook"
 import { CitySelector } from "@/components/city-selector"
 import { Link } from "react-router-dom"
-import { ProductCard } from "../components/home/product-card"
 import { categories } from "@/lib/data"
+import { ProductCardSkeleton } from "@/components/skeleton/product-card.skeleton"
+import { ProductCard } from "@/components/home/product-card"
+import { useCityStore, useProductStore } from "@/zustand/store"
 
 
 
 export default function MarketPlace() {
-  
-  useFetchProduct();
-  const { data } = useProductState();
 
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const { city, setCity } = useCityStore()
+  
+  const { loading, data } = useProductState();
+  const { getProducts } = useProductStore()
+
   const [showCityModal, setShowCityModal] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("")
-  const { data: { addToCart, cartCount }} = useCartState()
+  const { data: {  addToCart, cartCount }} = useCartState()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
 
@@ -36,20 +39,21 @@ export default function MarketPlace() {
     addToCart(newCartItems)
   }
 
-  const handleCitySelect = (city: string) => {
-    setSelectedCity(city);
-    localStorage.setItem('selectedCity', city);
-  }
+  
 
   useEffect(()=>{
-    // Check if user has already selected a city
-    const savedCity = localStorage.getItem('selectedCity');
-    if (!savedCity) {
+    if (!city) {
       setShowCityModal(true);
     } else {
-      setSelectedCity(savedCity);
+      setCity(city);
     }
   }, [])
+
+  useEffect(()=> {
+    if(city){
+      getProducts()
+    }
+  }, [city])
 
 
   return (
@@ -82,6 +86,25 @@ export default function MarketPlace() {
             <Scroller onAddToCart={handleAddToCart} products={topDeals} />
           </section> */}
 
+          <section id="all-products" className="py-12">
+            {/* <h2 className="font-headline text-xl font-semibold text-center mb-8">All Products in {selectedCity}</h2> */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              { loading ? (
+                Array(15).fill('').map(_=> (
+                  <ProductCardSkeleton />
+                ))
+              ) : (
+                data.products.length > 0 ? (
+                data.products.map((product) => (
+                  <ProductCard onAddToCart={()=>handleAddToCart(product)} key={product.id} product={product} />
+                ))
+              ) : (
+                <p className="col-span-full text-center text-muted-foreground">No products found in {city}.</p>
+              )
+              )}
+            </div>
+          </section>
+
           <section id="categories" className="pt-4">
             <h2 className="font-headline text-2xl font-semibold text-center mb-6">Shop by Category</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
@@ -93,19 +116,6 @@ export default function MarketPlace() {
               ))}
             </div>
           </section>
-
-          <section id="all-products" className="py-12">
-            {/* <h2 className="font-headline text-xl font-semibold text-center mb-8">All Products in {selectedCity}</h2> */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {data.products.length > 0 ? (
-                data.products.map((product) => (
-                  <ProductCard onAddToCart={()=>handleAddToCart(product)} key={product.id} product={product} />
-                ))
-              ) : (
-                <p className="col-span-full text-center text-muted-foreground">No products found in {selectedCity}.</p>
-              )}
-            </div>
-          </section>
         </div>
       </main>
 
@@ -114,7 +124,6 @@ export default function MarketPlace() {
       <CitySelectionModal
         isOpen={showCityModal}
         onClose={() => setShowCityModal(false)}
-        onCitySelect={handleCitySelect}
       />
     </div>
   )

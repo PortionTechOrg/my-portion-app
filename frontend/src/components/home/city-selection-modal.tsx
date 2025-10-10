@@ -1,23 +1,25 @@
 import { useState } from "react"
 import { X, MapPin } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { useCityStore } from "@/zustand/store"
 
 interface CitySelectionModalProps {
   isOpen: boolean
   onClose: () => void
-  onCitySelect: (city: string) => void
 }
 
 const availableCities = [
   "Ibadan"
 ]
 
-export default function CitySelectionModal({ isOpen, onClose, onCitySelect }: CitySelectionModalProps) {
+export default function CitySelectionModal({ isOpen, onClose }: CitySelectionModalProps) {
   const [selectedCity, setSelectedCity] = useState("")
+
+  const { setCity } = useCityStore()
 
   const handleSubmit = () => {
     if (selectedCity) {
-      onCitySelect(selectedCity)
+      setCity(selectedCity)
       onClose()
     }
   }

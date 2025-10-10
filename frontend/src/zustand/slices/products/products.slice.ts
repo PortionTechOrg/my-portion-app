@@ -34,7 +34,7 @@ return{
         selectedProduct: null,
 
         getProductsById: async (id:string) =>{
-            set({ loading: true, selectedProduct: null, error: null})
+            set({ loading: true,  error: null})
             try {
                 const res = await api.get( `/product/${id}`, );
                 set({ selectedProduct: res.data.data, loading: false })
@@ -45,6 +45,7 @@ return{
                     set({ error: err.message, loading: false })
                 }
             }
+
         },
 
         getUserProducts: async (page:number=1, limit:number=10) =>{
@@ -62,6 +63,7 @@ return{
                     set({ error: err.message, loading: false })
                 }
             }
+
         },
 
         getProducts: async (page:number=1, limit:number=10) =>{

@@ -3,7 +3,7 @@ import LoginPage from "./pages/login";
 import RegisterBuyer from "./pages/register-buyer";
 import RegisterVendor from "./pages/register-vendor";
 import HomePage from "./pages/home";
-import MarketPlace from "./pages/dashboard";
+import MarketPlace from "./pages/marketplace";
 import OrdersPage from "./pages/orders";
 import DashboardPage from "./pages/vendor/dashboard";
 import KYCPage from "./pages/vendor/kyc";
