@@ -193,8 +193,9 @@ const DashboardContent = ({
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <h2 className="text-lg sm:text-xl font-semibold">Your Live Products</h2>
             <button 
+              disabled={Boolean(!user?.kyc_verified)}
               onClick={onAddProduct}
-              className="bg-green-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-green-600 flex items-center font-medium w-full sm:w-auto justify-center"
+              className={`${Boolean(!user?.kyc_verified) ? "bg-slate-300 text-slate-500 hover:bg-slate-400" : "bg-green-500 text-white hover:bg-green-600"} px-4 sm:px-6 py-2 sm:py-3 rounded-lg  flex items-center font-medium w-full sm:w-auto justify-center"`}
             >
               <Plus size={20} className="mr-2" />
               Add New Product
