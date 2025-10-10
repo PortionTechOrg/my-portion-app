@@ -1,10 +1,10 @@
 import { CreditCard, Shield } from "lucide-react"
 import { Input } from "../../ui/input"
 import { Label } from "../../ui/label"
-import type { kycDetails } from "@shared/types/kyc"
+import type { kycAttribute } from "@shared/types/kyc"
 
 interface BusinessProfileTabProps {
-  profileData: kycDetails | null,
+  profileData: kycAttribute | null,
   bankDetails: {
     bankName: string
     accountNumber: string
@@ -22,7 +22,7 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
         </Label>
         <Input
           id="businessName"
-          value={profileData?.business?.business_name}
+          value={profileData?.kyc_business?.business_name}
           disabled
           className="bg-gray-50"
         />
@@ -45,7 +45,7 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
             <Input
               id="email"
               type="email"
-              value={profileData?.business?.business_email}
+              value={profileData?.kyc_business?.business_email}
               disabled
               className="bg-gray-50"
             />
@@ -58,7 +58,7 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
             <Input
               id="phone"
               type="tel"
-              value={profileData?.business?.business_phone_number}
+              value={profileData?.kyc_business?.business_phone_number}
               disabled
               className="bg-gray-50"
             />
@@ -76,7 +76,7 @@ const BusinessProfileTab = ({ profileData, bankDetails }: BusinessProfileTabProp
         </p>
         <Input
           id="address"
-          value={profileData?.business?.business_address}
+          value={profileData?.kyc_business?.business_address}
           disabled
           className="bg-gray-50"
         />

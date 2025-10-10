@@ -10,6 +10,10 @@ import { Order } from 'src/database/models/Order';
 import { User } from 'src/database/models/User';
 import { AddressAndCartSchema } from '@shared/validation/check-out-schema';
 import { Notification } from 'src/database/models/Notification';
+import { KycBusiness } from 'src/database/models/KycBusiness';
+import { KycBusinessDocs } from 'src/database/models/KycBusinessDocs';
+import { KycIdVerification } from 'src/database/models/KycIdVerification';
+import { KycPersonal } from 'src/database/models/KycPersonal';
 
 
 @Injectable()
@@ -47,7 +51,12 @@ export class ProductService {
 
     async getUserProducts ( user: UserAttributes, limit: number, page: number) {
 
-        const productCount = await Product.count({ paranoid: true });
+        const productCount = await Product.count({
+            where: {
+                seller_id: user.id
+            },
+            paranoid: true,
+         });
         const start = (Number(page) - 1) * Number(limit);
 
         const product = await Product.findAll({
@@ -69,21 +78,35 @@ export class ProductService {
     }
     
     async getProductById(id: string) {
-        const product = await Product.findOne({ where: { id }, include: [User] });
+        const product = await Product.findOne({
+            where: { id },
+            include: [
+            {
+                model: User,
+                include: [
+                { model: KycBusiness },
+                { model: KycBusinessDocs },
+                { model: KycIdVerification },
+                { model: KycPersonal },
+                ],
+            },
+            ],
+        });
 
         return {
             success: true,
             data: product,
-            message: `Product id: ${product?.id}`
+            message: product
+            ? `Product id: ${product.id}`
+            : `Product not found with id: ${id}`,
         };
-        
-    }
+        }
+
     
     async addNewProduct(user: UserAttributes, productDto: CreateProductDTO,  files: { image_url?: Express.Multer.File[], video_url?: Express.Multer.File[] }) {
         
         const { cloudinary, cloudinaryUploadFolder } = this.cloudinary.getCloudinary()
 
-        console.log("Files received:", files);
         const image_url_path = files.image_url ? files.image_url[0].path : null;
 
         const video_url_path = files.video_url ? files.video_url[0].path : null;
@@ -104,7 +127,7 @@ export class ProductService {
           seller_id: String(user.id),
           name: productDto.name,
           status: 'pending',
-          number_per_portion: productDto.number_per_portion,
+          number_per_portion: Number(productDto.number_per_portion),
      
           description: productDto.description || '',
           image_url,
@@ -136,6 +159,10 @@ export class ProductService {
 
     async checkOut(user_id: string, checkoutDTO: AddressAndCartSchema) {
 
+        const serviceCharge = 100;
+        const deliveryFee = 1000
+        const shippingCost = checkoutDTO.cartItems.reduce((sum, _) => sum + deliveryFee, 0) // Free shipping over #50
+
         const orders: Order[] = [];
 
         for (const item of checkoutDTO.cartItems ) {
@@ -161,9 +188,9 @@ export class ProductService {
         await this.sequelize.transaction( async ( t) => {
 
             const { dataValues} = await OrderRecord.create( {
-                product_id: checkoutDTO.cartItems.map( item => item.id),
                 status: "pending",
-                order_ids: [],
+                reference: JSON.stringify({ street_address: checkoutDTO.street_address, city: checkoutDTO.city, state: checkoutDTO.state }),
+                total_amount: Number(checkoutDTO.cartItems.reduce((total, item) => total + item.price * item.quantity, serviceCharge + shippingCost)) ,
                 user_id,
             }, { transaction: t })
 
@@ -171,7 +198,7 @@ export class ProductService {
                 const order = await Order.create( {
                         amount: String(item.price),
                         portion: item.quantity,
-                        order_record_id: String(dataValues.id),
+                        order_record_id: String(dataValues.id), 
                         product_id: item.id,
                         status: 'pending',
                         user_id,
@@ -191,16 +218,6 @@ export class ProductService {
                     title: 'Order Created',
                     message: `You have a new order for ${item.name} has been created`,
                     role_target: 'user',
-                })
-
-                await OrderRecord.update( {
-                        order_ids: order.id,
-                },
-                { 
-                        where: {
-                            id: dataValues.id
-                        },
-                        transaction: t
                 })
 
                 orders.push(order)

@@ -1,10 +1,9 @@
-import type { UserAttributes} from '@shared/types/user'
-
+import type { UserWithKycAttributes } from '@shared/types/product'
 
 export type loginProps = {
     token: string,
     refreshToken: string,
-    user: UserAttributes | null
+    user: UserWithKycAttributes | null
 }
 
 export type AuthResponse = {
@@ -13,7 +12,7 @@ export type AuthResponse = {
     data: { 
         token: string,
         refreshToken: string, 
-        user: UserAttributes | null
+        user: UserWithKycAttributes | null
     }
 }
 

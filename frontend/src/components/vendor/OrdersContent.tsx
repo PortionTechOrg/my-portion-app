@@ -1,3 +1,4 @@
+import { useFetchUser } from "@/zustand/hooks/user/user.hook"
 import { OrderCard } from "./index"
 import { useFetchOrders, useOrderState } from "@/zustand/hooks/orders/order.hook"
 
@@ -9,6 +10,8 @@ const OrdersContent = ({ onMarkDelivered }: OrdersContentProps) => {
   const { data: { product_orders } } = useOrderState()
 
   useFetchOrders()
+  useFetchUser();
+  
 
   return (
     <div className="space-y-6">

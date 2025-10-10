@@ -10,6 +10,8 @@ import { createWalletSlice, type WalletState } from "../slices/wallet/wallet.sli
 import { createTransactionSlice, type TransactionState } from "../slices/transaction/transaction.slice";
 import { createModalsSlice, type ModalState } from "../modal/modal.slice";
 import { createNotificationsSlice, type NotificiationState } from "../slices/notification/notification.slice";
+import { createUserSlice, type UserState } from "../slices/user/user.slice";
+import { createBankSlice, type BankState } from "../slices/bank/bank.slice";
 
 interface GlobalState extends 
 CartItemContextType, 
@@ -66,10 +68,24 @@ export const useWalletStore = create<WalletState
 }
 ))
 
+export const useBankStore = create<BankState
+>()((...a) =>(
+{
+    ...createBankSlice(...a)
+}
+))
+
 export const useTransactionStore = create<TransactionState
 >()((...a) =>(
 {
     ...createTransactionSlice(...a)
+}
+))
+
+export const useUserStore = create<UserState
+>()((...a) =>(
+{
+    ...createUserSlice(...a)
 }
 ))
 
@@ -79,6 +95,21 @@ export const useAuthStore = create<AuthState>()((...a) => (
     ...persist(createAuthSlice, { name: "auth-storage"})(...a),
 }
 ))
+
+type CityState = {
+  city: string;
+  setCity: (city: string) => void;
+};
+
+export const useCityStore = create<CityState>()(
+    persist(
+        (set) => ({
+        city: '',
+        setCity: (city) => set({ city }),
+        }), 
+        { name: "city",
+        }
+    ))
 
 export const useAdminStore = create<AdminOrdersState>()((...a) => (
 {

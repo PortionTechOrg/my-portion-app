@@ -42,18 +42,8 @@ const Checkout: React.FC = () => {
 
   const { form, onCheckOut } = useCheckOut()
 
-      const { isPaymentModalOpen} = useModalStore()
+  const { isPaymentModalOpen} = useModalStore()
   
-
-
-  const nigerianStates = [
-    "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa", "Benue", "Borno", 
-    "Cross River", "Delta", "Ebonyi", "Edo", "Ekiti", "Enugu", "FCT", "Gombe", "Imo", 
-    "Jigawa", "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara", "Lagos", "Nasarawa", 
-    "Niger", "Ogun", "Ondo", "Osun", "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", 
-    "Yobe", "Zamfara"
-  ]
-
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -63,9 +53,7 @@ const Checkout: React.FC = () => {
             <p className="text-muted-foreground mb-6">
               Add some fresh produce to your cart before checkout.
             </p>
-            <Button onClick={() => navigate('/')} 
-            // variant="cart"
-                >
+            <Button onClick={() => navigate('/')}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Continue Shopping
             </Button>
@@ -164,28 +152,11 @@ const Checkout: React.FC = () => {
                                           <SelectValue placeholder="Select State" />
                                         </SelectTrigger>
                                         <SelectContent >
-                                          {nigerianStates.map((state) => (
+                                          {["Oyo"].map((state) => (
                                               <SelectItem key={state} value={state}>{state}</SelectItem>
                                           ))}
                                         </SelectContent>
                                       </Select>
-                                    </FormControl>
-                                    <FormDescription />
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                                />
-                            </div>
-                            <div>
-                              <FormField
-                                control={form.control}
-                                name="zip"
-                                render={({field}) => (
-                                  <FormItem>
-                                    <FormLabel >ZIP Code</FormLabel>
-                                    <FormControl>
-                                      <Input 
-                                        placeholder="10001" {...field} />
                                     </FormControl>
                                     <FormDescription />
                                     <FormMessage />

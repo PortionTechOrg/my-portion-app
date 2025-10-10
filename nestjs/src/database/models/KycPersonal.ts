@@ -6,15 +6,15 @@ import {
   Default,
   AllowNull,
   ForeignKey,
-  Unique // Import Unique for unique constraints
+  Unique, // Import Unique for unique constraints
+  BelongsTo,
+  HasOne
 } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 import { CreationOptional } from 'sequelize';
 
-// Import your shared types
 import { KycPersonalAttribute } from '@shared/types/KycPersonal';
 
-// Import related models for ForeignKey decorators (adjust paths as needed)
 import { User } from './User'; // Assuming your User model is in './User.ts'
 
 @Table({
@@ -79,5 +79,9 @@ export class KycPersonal extends Model<KycPersonalAttribute> implements KycPerso
   @AllowNull(false)
   @Column(DataTypes.STRING)
   declare state: string;
+
+  @BelongsTo(() => User, { foreignKey: 'user_id', as: 'user' })
+    declare user?: User;
+
   
 }

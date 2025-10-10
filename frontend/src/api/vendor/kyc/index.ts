@@ -11,9 +11,9 @@ export default function KycApi (){
 
         }catch(err:any){
             if (err.response) {
-                return { success: false, message: err.response.data.message, data: { token: "", refreshToken: "", roles: [''] } };
+                return { success: false, message: err.response.data.message, data: null };
             } else {
-                return {success: false, message: err.message, data: {token: "", refreshToken: "", roles: ['']}}
+                return {success: false, message: err.message, data: null }
             }
         }
     }
@@ -28,9 +28,9 @@ export default function KycApi (){
 
         }catch(err:any){
             if (err.response) {
-                return { success: false, message: err.response.data.message, data: { token: "", refreshToken: "", roles: [''] } };
+                return { success: false, message: err.response.data.message, data: null };
             } else {
-                return {success: false, message: err.message, data: {token: "", refreshToken: "", roles: ['']}}
+                return {success: false, message: err.message, data: null}
             }
         }
     }

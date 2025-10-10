@@ -35,35 +35,12 @@ export class OrderRecord extends Model<OrderRecordAttribute> implements OrderRec
   declare user_id: string;
 
   @AllowNull(false)
-  @Column(DataTypes.JSON) // Storing an array of strings as JSON
-  declare product_id: string[]; // TypeScript type is an array of strings
+  @Column(DataTypes.JSON) 
+  declare reference: string; 
 
   @AllowNull(false)
-  @Default([]) // Default value for the column in the database
-  @Column({
-    type: DataTypes.JSON, // Storing an array of strings as JSON
-    // Custom getter and setter logic
-    get(): string[] {
-      const rawValue = this.getDataValue('order_ids');
-      // Ensure the returned value is always an array of strings
-      return Array.isArray(rawValue) ? rawValue : [];
-    },
-    set(value: string | string[]) {
-      const current = this.getDataValue('order_ids') || [];
-      if (typeof value === 'string') {
-        // Append new string to existing array
-        this.setDataValue('order_ids', [...current, value]);
-      } else if (Array.isArray(value)) {
-        // Replace with new array
-        this.setDataValue('order_ids', value);
-      } else {
-        // Handle unexpected input, e.g., set to empty array or throw error
-        this.setDataValue('order_ids', []);
-      }
-    },
-  })
-  // TypeScript type can be string[] or string | string[] depending on your preference for `set` input
-  declare order_ids: string[];
+  @Column(DataTypes.JSON) 
+  declare total_amount: number;
 
   @AllowNull(false)
   @Column({

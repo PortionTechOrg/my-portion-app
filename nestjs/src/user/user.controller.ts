@@ -8,7 +8,7 @@ export class UserController {
 
     constructor(private readonly userService: UserService) {}
 
-    @Get()
+    @Get('me')
     handleGetUser(@ParsedToken() user: User ) {
         return this.userService.getUser(user.id);
     }

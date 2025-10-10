@@ -3,7 +3,7 @@ import { Bell, Package, ShoppingCart, DollarSign, TrendingUp, Users, Plus, Eye, 
 import type { LucideIcon } from "lucide-react"
 import Modal from "../components/ui/modal"
 import KycApi from "@/api/vendor/kyc";
-import type { kycDetails } from "@shared/types/kyc";
+import type { kycAttribute } from "@shared/types/kyc";
 
 // Types and Interfaces
 type TabId = 'dashboard' | 'products' | 'orders' | 'wallet' | 'profile' | 'notifications';
@@ -626,7 +626,7 @@ export default function EnhancedVendorDashboard() {
   }
 
 
-  const [ vendorKycDetails, setVendorKycDetails ] = useState<kycDetails | null>(null);
+  const [ vendorKycDetails, setVendorKycDetails ] = useState<kycAttribute | null>(null);
 
   const { getKycDetails } = KycApi()
 
@@ -655,12 +655,12 @@ export default function EnhancedVendorDashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">{vendorKycDetails?.personal?.firstname.charAt(0)}</span>
+                <span className="text-white font-bold text-xl">{vendorKycDetails?.kyc_personal?.firstname.charAt(0)}</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">{vendorKycDetails?.personal?.firstname}</h1>
-                <p className="text-gray-600">{vendorKycDetails?.personal?.email} • {vendorKycDetails?.personal?.city}</p>
-                <p className="text-sm text-gray-500">Joined {String(vendorKycDetails?.personal?.createdAt)}</p>
+                <h1 className="text-2xl font-bold text-gray-800">{vendorKycDetails?.kyc_personal?.firstname}</h1>
+                <p className="text-gray-600">{vendorKycDetails?.kyc_personal?.email} • {vendorKycDetails?.kyc_personal?.city}</p>
+                <p className="text-sm text-gray-500">Joined {String(vendorKycDetails?.kyc_personal?.createdAt)}</p>
               </div>
             </div>
             <div className="text-right">

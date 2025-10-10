@@ -12,12 +12,10 @@ import {
 import { DataTypes } from 'sequelize';
 import { CreationOptional } from 'sequelize';
 
-// Import your shared types and enums
 import { ProductAttribute } from '../../../../shared/types/product';
 import { Status } from "../../../../shared/enums"; // Adjust path as necessary, from your provided snippet it's "../../../shared/enums"
 
 
-// Import related models for ForeignKey and HasMany decorators (adjust paths as needed)
 import { User } from './User'; // Assuming your User model is in './User.ts'
 import { Order } from './Order'; // Assuming your Order model is in './Order.ts'
 
@@ -66,17 +64,15 @@ export class Product extends Model<ProductAttribute> implements ProductAttribute
 
   @AllowNull(false)
   @Column(DataTypes.INTEGER) // Assuming number_per_portion is an integer
-  declare number_per_portion: string;
+  declare number_per_portion: number;
 
   @AllowNull(false)
   @Column({
     type: DataTypes.STRING,
     validate: {
-      // Use Object.values(QuantityUnit) if it's an enum, otherwise hardcode or use a type guard
       isIn: [['Kg', 'Pack', 'Bunch', 'Tubers', 'Pieces', 'Bag', 'Bucket', 'Congo']],
     },
   })
-  // If QuantityUnit is an enum, use `declare quantity_unit: QuantityUnit;`
   declare quantity_unit: string;
 
   @AllowNull(false)
@@ -107,10 +103,8 @@ export class Product extends Model<ProductAttribute> implements ProductAttribute
   @BelongsTo(() => User, { foreignKey: 'seller_id', as: 'user' })
   declare user?: User;
 
-  // Define the one-to-many relationship using @HasMany
-  // This replaces Product.hasMany(Order, { foreignKey: 'product_id' });
+
   @HasMany(() => Order, { foreignKey: 'product_id', as: 'orders' })
   declare orders?: Order[]; // The 'as' option defines the alias for the associated models
 }
 
-// Product.hasMany(Order, { foreignKey: 'product_id' });

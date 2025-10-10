@@ -3,6 +3,7 @@ import { Button } from "../../components/ui/button"
 import toast from "react-hot-toast"
 import { useNavigate, Link } from "react-router-dom"
 import { useAuthStore } from "@/zustand/store"
+import { useUserState } from "@/zustand/hooks/user/user.hook"
 
 interface SlideMenuProps {
   isOpen: boolean
@@ -10,7 +11,8 @@ interface SlideMenuProps {
 }
 
 export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
-  const { logoutAuth, isLoggedIn, user } = useAuthStore();
+  const { logoutAuth, isLoggedIn } = useAuthStore();
+  const { data: { user } } = useUserState()
   const navigate = useNavigate();
 
   const handleLogout = () => {

@@ -1,26 +1,27 @@
 import { motion, AnimatePresence } from "framer-motion"
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import { CheckCircle, Copy, CreditCard } from "lucide-react"
+import { Banknote, CheckCircle, Copy } from "lucide-react"
 import { Button } from "../ui/button"
 import toast from "react-hot-toast"
 import { useState } from "react"
 import CheckOutApi from "@/api/checkout/check-out-api"
 import { useCartState } from "@/zustand/hooks/cart/cart.hook"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useModalStore } from "@/zustand/store"
-
+import { Label } from "../ui/label"
+import { formatCurrency } from "@/lib/utils"
+import { Card, CardContent, CardDescription,  CardTitle } from "../ui/card"
 
 
 export default function CheckoutPaymentModal() {
+    const navigate = useNavigate();
 
     const { isPaymentModalOpen, togglePaymentModal} = useModalStore()
     const [paymentConfirmed, setPaymentConfirmed] = useState(false);
-    const { data: { cartItems, checkoutItem } } = useCartState()
+    const { data: { cartItems, clearCart, checkoutItem } } = useCartState()
     
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
-        toast("Bank details copied to clipboard.");
-        setPaymentConfirmed(true)
+        toast.success("Bank details copied to clipboard.");
     };
 
     // @ts-expect-error
@@ -59,59 +60,40 @@ export default function CheckoutPaymentModal() {
             onClick={(e) => e.stopPropagation()}
           >
             <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center">
-                    <CreditCard className="mr-2 h-5 w-5 text-primary" />
-                    Payment Method
+              <CardContent>
+                <>
+                    <CardTitle className="font-headline flex items-center gap-2">
+                        <Banknote className="h-6 w-6 text-primary"/>
+                        Manual Bank Transfer
                     </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-4">
-                    <div className="p-4 border rounded-lg bg-muted/30">
-                        <h3 className="font-semibold mb-3">Bank Transfer Details</h3>
-                        <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                            <span className="text-muted-foreground">Account Name:</span>
+                    <CardDescription>
+                        Please transfer the total amount to the account below. Your order will be processed once payment is confirmed.
+                    </CardDescription>
+                </>
+                    <div className="py-4 space-y-4">
+                        <div className="p-4 rounded-md bg-muted/50 border">
+                            <p className="text-sm text-muted-foreground">Total Amount</p>
+                            <p className="text-2xl font-bold font-headline">{formatCurrency(total)}</p>
+                        </div>
+                        <div className="space-y-1">
+                            <Label>Bank Name</Label>
+                            <p className="font-semibold">{bankDetails.bankName}</p>
+                        </div>
+                         <div className="space-y-1">
+                            <Label>Account Name</Label>
+                            <p className="font-semibold">{bankDetails.accountName}</p>
+                        </div>
+                        <div className="space-y-1">
+                            <Label>Account Number</Label>
                             <div className="flex items-center gap-2">
-                            <span className="font-medium">{bankDetails.accountName}</span>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => copyToClipboard(bankDetails.accountName)}
-                                className="h-6 w-6 p-0"
-                            >
-                                <Copy className="h-3 w-3" />
-                            </Button>
+                                <p className="font-semibold text-lg font-mono">{bankDetails.accountNumber}</p>
+                                <Button variant="ghost" size="icon" onClick={() => {copyToClipboard(bankDetails.accountNumber)}}>
+                                    <Copy className="h-4 w-4" />
+                                </Button>
                             </div>
                         </div>
-                        <div className="flex justify-between">
-                            <span className="text-muted-foreground">Account Number:</span>
-                            <div className="flex items-center gap-2">
-                            <span className="font-medium">{bankDetails.accountNumber}</span>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => copyToClipboard(bankDetails.accountNumber)}
-                                className="h-6 w-6 p-0"
-                            >
-                                <Copy className="h-3 w-3" />
-                            </Button>
-                            </div>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-muted-foreground">Bank Name:</span>
-                            <span className="font-medium">{bankDetails.bankName}</span>
-                        </div>
-                        </div>
                     </div>
-                    
-                    <div className="p-4 border rounded-lg bg-warning/10 border-warning">
-                        <p className="text-sm text-warning-foreground">
-                        <strong>Transfer Amount:</strong>  ₦{total.toFixed(2)}
-                        </p>
-                    </div>
-
-                    {!paymentConfirmed ? (
+                     {!paymentConfirmed ? (
                         <Button
 
                         onClick={async()=>{
@@ -119,10 +101,13 @@ export default function CheckoutPaymentModal() {
 
                         if(response.success){
 
-                            setPaymentConfirmed(true); 
-                        }else{
+                            setPaymentConfirmed(true);
+                            navigate('/')
+                            clearCart()
                             
                         }
+
+                        toast(response.message)
                         }
                     }
                         className="w-full"
@@ -143,9 +128,8 @@ export default function CheckoutPaymentModal() {
                         </Link>
                         </div>
                     )}
-                    </div>
-                </CardContent>
-                </Card>
+                    </CardContent>
+                    </Card>
           </motion.div>
         </motion.div>
       )}

@@ -1,12 +1,18 @@
 import type { ProductAttribute } from "@shared/types/product"
 import { Status } from "@shared/enums"
-import { Package, Plus, Share2, Edit3 } from "lucide-react"
+import { Package, Plus, Share2, Edit3,Clock, DollarSign, CheckCircle, XCircle } from "lucide-react"
 import { useEffect, useState } from "react"
 import WithdrawFundsModal from "./WithdrawFundsModal"
 import WalletApi from "@/api/wallet/wallet-api"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { Button } from "../ui/button"
+import { Link } from "react-router-dom"
+import { cn, formatCurrency } from "@/lib/utils"
+import { useFetchUserProduct, useProductState } from "@/zustand/hooks/product/product.hook"
+import {  useUserStore } from "@/zustand/store"
+import { useFetchUser } from "@/zustand/hooks/user/user.hook"
 
 interface DashboardContentProps {
-  vendorProducts: ProductAttribute[]
   dashboardStats: {
     walletBalance: number
     newOrders: number
@@ -26,7 +32,6 @@ interface DashboardContentProps {
 }
 
 const DashboardContent = ({ 
-  vendorProducts, 
   dashboardStats, 
   bankDetails,
   kycStatus,
@@ -36,12 +41,16 @@ const DashboardContent = ({
   onWithdrawFunds,
   onRedirectToBank
 }: DashboardContentProps) => {
-  const hasProducts = vendorProducts.length > 0
+  const { data: { user_products }} = useProductState()
   const [showWithdrawModal, setShowWithdrawModal] = useState(false)
-
+  
   const [walletBalance, setWalletBalance] = useState<{main_balance:number, sub_balance:number}>({main_balance: 0, sub_balance: 0});
 
     const { getWalletBalance } = WalletApi()
+
+    const { user } = useUserStore();
+
+  const hasProducts = user_products?.length > 0
   
 
   const handleWithdrawClick = () => {
@@ -52,6 +61,10 @@ const DashboardContent = ({
     await onWithdrawFunds(amount)
 
   }
+
+  useFetchUserProduct()
+  useFetchUser();
+  
 
   useEffect(()=>{
   
@@ -66,16 +79,123 @@ const DashboardContent = ({
 
   }, [])
 
+  console.log(user?.kyc_status)
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div>
+
+      <div>
+        {user?.kyc_status == "submitted" ? (
+          (
+          <Card className="mb-8 bg-yellow-50 border-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-800">
+            <CardHeader className="flex flex-row items-center gap-4">
+              <Clock className="w-8 h-8 text-yellow-600" />
+              <div>
+                <CardTitle className="text-yellow-800 dark:text-yellow-300">Account Pending Approval</CardTitle>
+                <CardDescription className="text-yellow-700 dark:text-yellow-400">
+                  Your vendor application is currently under review. We'll notify you once it's approved. If you haven't completed your KYC, please do so.
+                </CardDescription>
+              </div>
+              {/* <Button asChild className="ml-auto">
+                  <Link to="/dashboard/kyc">Complete KYC</Link>
+              </Button> */}
+            </CardHeader>
+          </Card>
+        )
+        ): 
+        user?.kyc_status == "rejected" ? (
+          (
+          <Card className="mb-8 bg-red-50 border-red-200 dark:bg-red-900/30 dark:border-red-800">
+            <CardHeader className="flex flex-row items-center gap-4">
+              <XCircle className="w-8 h-8 text-red-600" />
+              <div>
+                <CardTitle className="text-red-800 dark:text-red-300">Account Application Rejected</CardTitle>
+                <CardDescription className="text-red-700 dark:text-red-400">
+                  Unfortunately, your vendor application was not approved. Please contact support for more information.
+                </CardDescription>
+              </div>
+            </CardHeader>
+          </Card>
+        ))
+        : 
+        user?.kyc_status == "not_submitted" ? (
+          (
+          <Card className="mb-8 bg-yellow-50 border-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-800">
+            <CardHeader className="flex flex-row items-center gap-4">
+              <Clock className="w-8 h-8 text-yellow-600" />
+              <div>
+                <CardTitle className="text-yellow-800 dark:text-yellow-300">Verification Required</CardTitle>
+                <CardDescription className="text-yellow-700 dark:text-yellow-400">
+                  You haven’t submitted your verification documents yet. To become a verified vendor and start selling, please complete your KYC verification.
+                </CardDescription>
+              </div>
+              <Button asChild className="ml-auto">
+                  <Link to="/dashboard/kyc">Complete KYC</Link>
+              </Button>
+            </CardHeader>
+          </Card>
+        ))
+        : null }
+
+        {/* { user?.kyc_verified && (
+          <Card className="mb-8 bg-red-50 border-red-200 dark:bg-red-900/30 dark:border-red-800">
+            <CardHeader className="flex flex-row items-center gap-4">
+              <XCircle className="w-8 h-8 text-red-600" />
+              <div>
+                <CardTitle className="text-red-800 dark:text-red-300">Account Application Rejected</CardTitle>
+                <CardDescription className="text-red-700 dark:text-red-400">
+                  Unfortunately, your vendor application was not approved. Please contact support for more information.
+                </CardDescription>
+              </div>
+            </CardHeader>
+          </Card>
+        )} */}
+
+        <div className={cn("grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8", !user?.kyc_verified && "opacity-50 pointer-events-none")}>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{formatCurrency(0)}</div>
+            <p className="text-xs text-muted-foreground">+0% from last month</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Products</CardTitle>
+            <Package className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{user_products.length}</div>
+            <p className="text-xs text-muted-foreground">Your listed products</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Completed Sales</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">0</div>
+            <p className="text-xs text-muted-foreground">Portions sold this month</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+
 
       <div className="lg:col-span-2">
         <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
             <h2 className="text-lg sm:text-xl font-semibold">Your Live Products</h2>
             <button 
+              disabled={Boolean(!user?.kyc_verified)}
               onClick={onAddProduct}
-              className="bg-green-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-green-600 flex items-center font-medium w-full sm:w-auto justify-center"
+              className={`${Boolean(!user?.kyc_verified) ? "bg-slate-300 text-slate-500 hover:bg-slate-400" : "bg-green-500 text-white hover:bg-green-600"} px-4 sm:px-6 py-2 sm:py-3 rounded-lg  flex items-center font-medium w-full sm:w-auto justify-center"`}
             >
               <Plus size={20} className="mr-2" />
               Add New Product
@@ -105,7 +225,7 @@ const DashboardContent = ({
           ) : (
             // State 2: Active Store - Day-to-Day Experience
             <div className="space-y-4">
-              {vendorProducts.map(product => (
+              {user_products.map(product => (
                 <div key={product.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
                     <div className="flex-1">
@@ -221,6 +341,7 @@ const DashboardContent = ({
         kycStatus={kycStatus}
         onRedirectToBank={onRedirectToBank}
       />
+    </div>
     </div>
   )
 }

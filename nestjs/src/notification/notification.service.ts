@@ -8,7 +8,7 @@ export class NotificationService {
         
         const start = (Number(page) - 1) * Number(limit);
 
-        const unreadNotificationCount = await Notification.count( { where: { is_read: false }});
+        const unreadNotificationCount = await Notification.count( { where: { user_id, is_read: false }});
         
         const notifications = await Notification.findAll(
             {

@@ -1,7 +1,8 @@
-import { useAuthStore } from "@/zustand/store";
+import { formatDate } from "@/lib/utils";
+import { useUserState } from "@/zustand/hooks/user/user.hook";
 
 const VendorHeader = () => {
-  const { user } = useAuthStore();
+  const { data: { user } } = useUserState();
   
   return (
     <div className="bg-white rounded-lg shadow-sm border p-4 sm:p-6 mb-6 sm:mb-8">
@@ -13,7 +14,7 @@ const VendorHeader = () => {
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-800">{user?.firstname}</h1>
             <p className="text-gray-600 text-sm sm:text-base">{user?.email} • {user?.role}</p>
-            <p className="text-sm text-gray-500">Joined {String(user?.createdAt)}</p>
+            <p className="text-sm text-gray-500">Joined {formatDate(String(user?.createdAt), "MMM, YYYY")}</p>
           </div>
         </div>
         <div className="text-right">

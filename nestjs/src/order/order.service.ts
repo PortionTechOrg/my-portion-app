@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Status } from '@shared/enums';
 import { Order } from 'src/database/models/Order';
-import { OrderRecord } from 'src/database/models/order-record';
 import { Product } from 'src/database/models/Product';
 import { User } from 'src/database/models/User';
 
@@ -52,8 +51,7 @@ export class OrderService {
     }
 
     async addNewOrder( user_id: string, productId: string, quantity: string ) {
-        // Logic to add a new order
-        // This is a placeholder implementation
+        
         return {
             success: true,
             message: "New order added successfully",
@@ -61,59 +59,64 @@ export class OrderService {
         };
     }
 
-    async markAsPaid(orderRecordId: string) {
+    async markAsPaid(order_record_id: string) {
 
-        const updatedOrderRecord = await OrderRecord.update(
-            { status: 'pending' },
-            { where: { id: orderRecordId } }
-        );
-
-        const orderRecord = await OrderRecord.findOne({
+        await Order.update({ 
+            status: "paid"
+        }, {
             where: {
-                id: orderRecordId,
+                order_record_id
             }
-        });
+        })
 
-        for( const orderRecordProductId of orderRecord?.product_id || [] ){
-            await Order.update({ 
-                status: "delivered"
-            }, {
-                where: {
-                    product_id: orderRecordProductId
-                }
-            })
+        const orders = await Order.findAll( { where: { order_record_id}})
 
-            const order = await Order.findOne( {
-                where: {
-                    
-                    order_record_id: orderRecordId,
-                    product_id: orderRecordProductId
-                }
-            })
-
-
-            const prevOrder = await Product.findOne({ where: { id: order?.product_id}})
-
-
-
+        for ( const order of orders ){
             const p = await Product.decrement( "available_portions",
                 {
-                    by: order?.portion,
+                    by: Number(order.portion),
                     where: {
-                        id: order?.product_id
+                        id: order.product_id
                     }
                 }
             )
-
         }
 
         return {
             success: true,
-            data: {
-                orderRecordId,
-                updatedOrderRecord
-            },
-            message: "Order updated"
+            data: null,
+            message: "Order marked as pending"
+        }
+
+    }
+
+    async markAsCompleted(order_record_id: string) {
+
+        await Order.update({ 
+            status: "completed"
+        }, {
+            where: {
+                order_record_id
+            }
+        })
+
+        const orders = await Order.findAll( { where: { order_record_id}})
+
+        for ( const order of orders ){
+            const p = await Product.decrement( "available_portions",
+                {
+                    by: Number(order.portion),
+                    where: {
+                        id: order.product_id
+                    }
+                }
+            )
+        }
+
+        return {
+            success: true,
+            data: null,
+            message: "Order marked as completed"
         }
 
     }

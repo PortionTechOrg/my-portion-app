@@ -64,8 +64,7 @@ export function CartContent() {
                             variant="outline"
                             size="sm"
                             className="w-8 h-8 p-0 bg-transparent"
-                            // @ts-expect-error
-                            onClick={() => updateCartItemQuantity(item.id, item.quantity - 1)}
+                            onClick={() => updateCartItemQuantity(String(item.id), Number(item.quantity) - 1)}
                             >
                             <Minus className="w-3 h-3" />
                         </Button>
@@ -74,8 +73,8 @@ export function CartContent() {
                             variant="outline"
                             size="sm"
                             className="w-8 h-8 p-0 bg-transparent"
-                            // @ts-expect-error
-                            onClick={() => updateCartItemQuantity(item.id, item.quantity + 1)}
+                            
+                            onClick={() => updateCartItemQuantity(String(item.id), Number(item.quantity) + 1)}
                             >
                             <Plus className="w-3 h-3" />
                         </Button>
@@ -85,8 +84,7 @@ export function CartContent() {
                         variant="ghost"
                         size="sm"
                         className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2"
-                        // @ts-expect-error
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(String(item.id))}
                         >
                         <Trash2 className="w-4 h-4" />
                         </Button>
@@ -126,8 +124,8 @@ export function CartContent() {
                 <Button 
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
-                <Link to={`${isLoggedIn ? '/checkout': '/login'}`}>
-                {isLoggedIn ? 'Proceed to Checkout' : 'Sign In to Checkout'}
+                <Link to={`${isLoggedIn ? '/cart': '/login'}`}>
+                    {isLoggedIn ? 'Proceed to Checkout' : 'Sign In to Checkout'}
                 </Link>
                 </Button>
             </div>

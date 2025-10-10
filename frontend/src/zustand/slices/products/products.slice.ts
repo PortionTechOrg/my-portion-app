@@ -1,5 +1,5 @@
 import { api, apiPrivate } from "@/api/temp-config";
-import type { ProductWithuser } from "@shared/types/product";
+import type { ProductWithuser, ProductWithUserAndKyc } from "@shared/types/product";
 import type { ProductSchema } from "@shared/validation/product-schema";
 import toast from "react-hot-toast";
 import type { StateCreator } from "zustand";
@@ -7,9 +7,9 @@ import type { StateCreator } from "zustand";
 export interface ProductState {
     loading: boolean,
     error: string | null,
-    products: ProductWithuser[],
+    products: ProductWithUserAndKyc[],
     user_products: ProductWithuser[],
-    selectedProduct: ProductWithuser | null,
+    selectedProduct: ProductWithUserAndKyc | null,
 
     clearSelectedProduct: () => void,
 
@@ -34,7 +34,7 @@ return{
         selectedProduct: null,
 
         getProductsById: async (id:string) =>{
-            set({ loading: true, selectedProduct: null, error: null})
+            set({ loading: true,  error: null})
             try {
                 const res = await api.get( `/product/${id}`, );
                 set({ selectedProduct: res.data.data, loading: false })
@@ -45,6 +45,7 @@ return{
                     set({ error: err.message, loading: false })
                 }
             }
+
         },
 
         getUserProducts: async (page:number=1, limit:number=10) =>{
@@ -62,6 +63,7 @@ return{
                     set({ error: err.message, loading: false })
                 }
             }
+
         },
 
         getProducts: async (page:number=1, limit:number=10) =>{

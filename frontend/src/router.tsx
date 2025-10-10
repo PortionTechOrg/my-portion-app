@@ -3,14 +3,13 @@ import LoginPage from "./pages/login";
 import RegisterBuyer from "./pages/register-buyer";
 import RegisterVendor from "./pages/register-vendor";
 import HomePage from "./pages/home";
-import MarketPlace from "./pages/dashboard";
+import MarketPlace from "./pages/marketplace";
 import OrdersPage from "./pages/orders";
-import DashboardPage from "./pages/vendor/vendor";
+import DashboardPage from "./pages/vendor/dashboard";
 import KYCPage from "./pages/vendor/kyc";
 import ProtectedRoutes from "./hooks/protected-routes";
 import Checkout from "./pages/check-out";
 import CompleteCheckOutPayment from "./pages/complete-checkout-payment";
-import ProductDetailPage from "./pages/product-details";
 import VendorDashboardLayout from "./components/Layout/vendor-dashboard-layout";
 import VendorProductsPage from "./pages/vendor/products";
 import DashboardNotificationPage from "./pages/vendor/notification";
@@ -20,6 +19,10 @@ import DashboardOrdersPage from "./pages/vendor/orders";
 import AdminDashboardLayout from "./components/Layout/admin-dashboard-layout";
 import AdminDashboardPage from "./pages/admin";
 import AdminOrdersPage from "./pages/admin/orders";
+import ProductDetailPage from "./pages/product-details";
+import FeaturedProductedPage from "./pages/featured-product-page";
+import CartPage from "./pages/cart";
+import LoginVendorPage from "./pages/login-vendor";
 
 const AppRouter = () => (
   
@@ -27,11 +30,14 @@ const AppRouter = () => (
           
           <Route path="/" element={<MarketPlace />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/products" element={<FeaturedProductedPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/login/vendor" element={<LoginVendorPage />} />
           <Route path="/register" element={<RegisterBuyer />} />
           <Route path="/register/vendor" element={<RegisterVendor />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout/complete-payment/:order_record_id" element={<CompleteCheckOutPayment />} />
 

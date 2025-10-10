@@ -8,20 +8,15 @@ import {
 } from "../../components/vendor"
 import type { ProductAttribute } from "@shared/types/product";
 import type { UserAttributes } from "@shared/types/user";
-import { useProductState, useFetchUserProduct } from "@/zustand/hooks/product/product.hook";
 
 
 export default function DashboardPage() {
 
-  useFetchUserProduct();
-  const { data } = useProductState()
 
   const [activeTab, setActiveTab] = useState<TabId>('dashboard')
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false)
   const [profileData] = useState<UserAttributes | null>(null)
   const [redirectToBankSection, setRedirectToBankSection] = useState(false)
-
-  const user_products = data.user_products
 
   // Reset redirect flag when wallet tab is accessed normally
   useEffect(() => {
@@ -64,7 +59,6 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-4 sm:py-8">
         <VendorHeader />
         <DashboardContent
-          vendorProducts={user_products}
           dashboardStats={dashboardStats}
           // @ts-expect-error
           bankDetails={profileData?.bankDetails}

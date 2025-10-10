@@ -1,8 +1,16 @@
 export const Status = {
     Pending: 'pending',
     Delivered: 'delivered',
+    Paid: 'paid',
     Completed: 'completed',
     Cancelled: 'cancelled'
+} as const;
+
+export const Kyc_Status = {
+    Submitted: 'submitted',
+    Not_Submitted: 'not_submitted',
+    Verified: 'verified',
+    Rejected: 'rejected'
 } as const;
 
 export const TransactionTypes = {
@@ -13,6 +21,7 @@ export const TransactionTypes = {
 } as const 
 
 
+export type Kyc_Status = (typeof Kyc_Status)[keyof typeof Kyc_Status];
 export type Status = (typeof Status)[keyof typeof Status];
 export type TransactionTypes = (typeof TransactionTypes)[keyof typeof TransactionTypes];
 

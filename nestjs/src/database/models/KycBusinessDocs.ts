@@ -8,15 +8,14 @@ import {
   ForeignKey,
   CreatedAt, // Import CreatedAt for explicit createdAt column
   UpdatedAt, // Import UpdatedAt for explicit updatedAt column
-  DeletedAt // Import DeletedAt for explicit deletedAt column (if using paranoid)
+  DeletedAt, // Import DeletedAt for explicit deletedAt column (if using paranoid)
+  BelongsTo
 } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 import { CreationOptional } from 'sequelize';
 
-// Import your shared types
 import { KycBusinessDocsAttribute } from '@shared/types/kyc-business-docs';
 
-// Import related models for ForeignKey decorators (adjust paths as needed)
 import { User } from './User'; // Assuming your User model is in './User.ts'
 
 @Table({
@@ -48,8 +47,6 @@ export class KycBusinessDocs extends Model<KycBusinessDocsAttribute> implements 
   @Column(DataTypes.STRING)
   declare tax_certificate: string; // Type can be string or null
 
-  // Sequelize-typescript manages these automatically when `timestamps: true` and `paranoid: true`
-  // You can declare them explicitly with their decorators for better type clarity
   @CreatedAt
   declare createdAt: CreationOptional<Date>; // Use CreationOptional for auto-managed dates
 
@@ -57,5 +54,8 @@ export class KycBusinessDocs extends Model<KycBusinessDocsAttribute> implements 
   declare updatedAt: CreationOptional<Date>; // Use CreationOptional for auto-managed dates
 
   @DeletedAt
-  declare deletedAt?: Date; // It's optional because it's only set on soft delete
+  declare deletedAt?: Date;
+
+  @BelongsTo(() => User, { foreignKey: 'user_id', as: 'user' })
+  declare user?: User;
 }

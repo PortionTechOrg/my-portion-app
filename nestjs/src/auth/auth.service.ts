@@ -10,6 +10,10 @@ import { refreshTokenResponse } from '../../../shared/types/services';
 import { MailerService } from 'src/mailer/mailer.service';
 import { ConfigService } from '@nestjs/config';
 import { Wallet } from 'src/database/models/Wallet';
+import { KycPersonal } from 'src/database/models/KycPersonal';
+import { KycIdVerification } from 'src/database/models/KycIdVerification';
+import { KycBusiness } from 'src/database/models/KycBusiness';
+import { KycBusinessDocs } from 'src/database/models/KycBusinessDocs';
 
 
 @Injectable()
@@ -25,8 +29,10 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(createUserDto.password, 10);
     const user = await User.create({ 
       firstname: createUserDto.firstname, 
-      lastname: createUserDto.lastname, 
+      lastname: createUserDto.lastname,
+      // phone_number: null, 
       email: createUserDto.email,
+      kyc_status: "not_submitted",
       password: passwordHash,
       role: createUserDto.role,
       email_verified: false,
@@ -55,7 +61,7 @@ export class AuthService {
     const jwtSecret = this.configService.get('ACCESSTOKENSECRET');
     const jwtSecretRefresh = this.configService.get('REFRESHTOKENSECRET');
 
-    const user = await User.findOne({ where: { email: loginDto.email } });
+    const user = await User.findOne({ where: { email: loginDto.email }, include: [KycPersonal, KycIdVerification, KycBusiness, KycBusinessDocs] });
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -70,6 +76,7 @@ export class AuthService {
     });
     const token = sign(user.toJSON(), jwtSecret, { expiresIn: '1h' });
     const refreshToken = sign(user.toJSON(), jwtSecretRefresh, { expiresIn: '1d' });
+    console.log(user)
     return { success: true, data: { token, refreshToken, user }, message: "Login Successful" };
   }
 
