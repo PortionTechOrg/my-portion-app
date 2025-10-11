@@ -7,10 +7,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ShoppingCart, Minus, Plus, Scale, Package, Store, CalendarDays, ChevronRight } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Scale, Package, Store, CalendarDays, ChevronRight, ArrowLeft } from "lucide-react";
 
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCartStore, useProductStore } from "@/zustand/store";
 import { useCartState } from "@/zustand/hooks/cart/cart.hook";
 import { useProductState } from "@/zustand/hooks/product/product.hook";
@@ -27,6 +27,7 @@ import toast from "react-hot-toast";
 
 export default function ProductDetailPage() {
     const { id } = useParams<{id: string}>();
+    const navigate = useNavigate();
     const { getProductsById, clearSelectedProduct } = useProductStore()
     const { data: { addToCart, cartCount, updateCartItemQuantity  } } = useCartState()
 
@@ -106,6 +107,10 @@ export default function ProductDetailPage() {
         <ChevronRight className="h-4 w-4 mx-1" />
         <span className="font-medium text-foreground truncate">{product.name}</span>
       </div>
+      <Button variant="outline" onClick={() => navigate('/')} className="my-4">
+        <ArrowLeft className="h-4 w-4" />
+        Back to Shop
+      </Button>
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
         <div className="lg:col-span-2 grid md:grid-cols-2 gap-8 lg:gap-12">
           <div>

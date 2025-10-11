@@ -6,6 +6,7 @@ import {
   Default,
   AllowNull,
   ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 import { CreationOptional } from 'sequelize';
@@ -16,6 +17,7 @@ import { Status } from "../../../../shared/enums"; // Assuming Status is an enum
 
 // Import related models for ForeignKey decorators (adjust paths as needed)
 import { User } from './User'; // Assuming your User model is in './User.ts'
+import { Order } from './Order';
 
 @Table({
   tableName: 'order_record',
@@ -51,4 +53,6 @@ export class OrderRecord extends Model<OrderRecordAttribute> implements OrderRec
   })
   declare status: Status; // Use the Status enum type directly
 
+  @BelongsTo(() => Order, { foreignKey: 'order_id', as: 'order' })
+  declare order_record?: Order;
 }

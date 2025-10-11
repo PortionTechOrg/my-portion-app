@@ -57,6 +57,7 @@ export class ProductService {
             },
             paranoid: true,
          });
+         
         const start = (Number(page) - 1) * Number(limit);
 
         const product = await Product.findAll({

@@ -76,22 +76,11 @@ export default function MarketPlace() {
         </div>
 
         <div className="container mx-auto py-2 space-y-12">
-          {/* <section id="featured-products">
-            <SectionTitle title="Featured" href="/products" />
-            <Scroller onAddToCart={handleAddToCart} products={featuredProducts} />
-          </section> */}
-
-          {/* <section id="top-deals">
-            <SectionTitle title="Top Deals" href="/products" />
-            <Scroller onAddToCart={handleAddToCart} products={topDeals} />
-          </section> */}
-
           <section id="all-products" className="py-12">
-            {/* <h2 className="font-headline text-xl font-semibold text-center mb-8">All Products in {selectedCity}</h2> */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
               { loading ? (
-                Array(15).fill('').map(_=> (
-                  <ProductCardSkeleton />
+                Array(15).fill('').map( (_, idx)=> (
+                  <ProductCardSkeleton key={idx} />
                 ))
               ) : (
                 data.products.length > 0 ? (

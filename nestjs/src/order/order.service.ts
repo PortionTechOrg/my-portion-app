@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Status } from '@shared/enums';
 import { Order } from 'src/database/models/Order';
+import { OrderRecord } from 'src/database/models/order-record';
 import { Product } from 'src/database/models/Product';
 import { User } from 'src/database/models/User';
 
@@ -27,9 +28,27 @@ export class OrderService {
 
     }
 
-    async getAllUserOrders( user_id: string, page: string, limit: string ) {
+    async getUserOrderById( user_id: string, order_id) {
 
-        const orderCount = await Order.count()
+        const orders = await Order.findOne( {
+            where: {
+                user_id,
+                id: order_id
+            },
+            include: [Product, OrderRecord],
+        })
+
+        return {
+            success: true,
+            data: { orders },
+            message: "User order by id found!"
+        }
+    }
+
+    async getUserOrders( user_id: string, page: string, limit: string ) {
+
+        const orderCount = await Order.count( { where: { user_id }, paranoid: true } )
+
         const start = ( Number(page) -1 ) * Number(limit);
 
         const orders = await Order.findAll( {
@@ -37,8 +56,10 @@ export class OrderService {
             where: {
                 user_id
             },
+            include: [Product, OrderRecord],
             order: [ ["createdAt", "DESC"]],
-            offset: Number(start), limit: Number(limit)
+            offset: Number(start),
+            limit: Number(limit)
         })
 
         const totalPages = Math.ceil(orderCount/Number(limit));

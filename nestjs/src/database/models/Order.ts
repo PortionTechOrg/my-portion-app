@@ -62,4 +62,7 @@ export class Order extends Model<OrderAttribute> implements OrderAttribute {
   @BelongsTo(() => Product, { foreignKey: 'product_id', as: 'product' })
   declare product?: Product;
 
+  @BelongsTo(() => OrderRecord, { foreignKey: 'order_record_id', as: 'order_record' })
+  declare order_record?: OrderRecord;
+
 }

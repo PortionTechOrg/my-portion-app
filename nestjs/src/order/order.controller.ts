@@ -7,19 +7,11 @@ export class OrderController {
 
     constructor(private readonly orderService: OrderService) {}
 
-    @Get(':id')
-    getOrderById(@ParsedToken() user: { id: string }, @Query('limit') limit: string,  @Query('page') page: string) {
-        return this.orderService.getAllUserOrders(user.id, page, limit); // Assuming '1' is the default page and limit
-    }
     
-    @Get('all') 
-    getAllOrders(@ParsedToken() user: { id: string }, @Query('page') page: string, @Query('limit') limit: string    ) {
-        return this.orderService.getAllUserOrders(user.id, page, limit);
-    }
 
     @Get()
-    getAllUserOrders(@ParsedToken() user: { id: string }, @Query('page') page: string, @Query('limit') limit: string) {
-        return this.orderService.getAllUserOrders(user.id, page, limit);
+    getUserOrders(@ParsedToken() user: { id: string }, @Query('page') page: string, @Query('limit') limit: string) {
+        return this.orderService.getUserOrders(user.id, page, limit);
     }
 
     @Post()
@@ -30,6 +22,13 @@ export class OrderController {
     @Patch('complete-check-out/:id')
     markAsPaid(@Param('id') id: string) {
         return this.orderService.markAsPaid(id);
+    }
+    
+    @Get(':id')
+    getOrderById(
+        @Param('id') order_id: string,
+        @ParsedToken() user: { id: string }) {
+        return this.orderService.getUserOrderById(user.id, order_id); // Assuming '1' is the default page and limit
     }
 }
 

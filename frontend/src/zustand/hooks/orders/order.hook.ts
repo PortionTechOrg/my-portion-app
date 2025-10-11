@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useOrderStore } from "../../store";
 
 export function useOrderState() {
-    const { loading, error, product_orders, selected_product_order } = useOrderStore();
+    const { loading, user_order_record, error, product_orders, selected_order, user_orders } = useOrderStore();
     
     const data = {
         product_orders,
-        selected_product_order,
+        user_orders,
+        user_order_record,
+        selected_order,
     }
 
     return {
@@ -17,24 +19,24 @@ export function useOrderState() {
 }
 
 
-export function useFetchOrders() {
-    const { getProductOrders } = useOrderStore();
+export function useFetchUserOrder() {
+    const { getUserOrders } = useOrderStore();
     
     useEffect(()=>{
 
         const fetchProductsOrders = async () => {
             const fetches = [
-                getProductOrders()
+                getUserOrders()
             ]
 
             try {
                 await Promise.allSettled(fetches);
             } catch (err) {
-                console.error("One or more dashboard analytics fetches failed:", err);
+                console.error("One or more order fetches failed:", err);
             }
         }
 
         fetchProductsOrders();
         
-    }, [getProductOrders]);
+    }, [getUserOrders]);
 }

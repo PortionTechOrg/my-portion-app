@@ -42,11 +42,13 @@ import { NotificationModule } from './notification/notification.module';
 import { GlobalModule } from './global/global.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BankModule } from './bank/bank.module';
+import { OrdeRecordModule } from './orde_record/orde_record.module';
+import { OrderRecordModule } from './order_record/order_record.module';
 
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
-    SequelizeModule.forFeature([Bank, KycBusiness, KycBusinessDocs, Transaction, Notification, KycIdVerification, KycPersonal, OrderRecord, Order, Product, Rating, SellerKyc, User, Wallet,  ]),
+    SequelizeModule.forFeature([Bank, OrderRecord, KycBusiness, KycBusinessDocs, Transaction, Notification, KycIdVerification, KycPersonal, OrderRecord, Order, Product, Rating, SellerKyc, User, Wallet,  ]),
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     SequelizeModule.forRootAsync( 
@@ -63,7 +65,9 @@ import { BankModule } from './bank/bank.module';
     TransactionModule,
     NotificationModule,
     GlobalModule,
-    BankModule
+    BankModule,
+    OrdeRecordModule,
+    OrderRecordModule
   ],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },

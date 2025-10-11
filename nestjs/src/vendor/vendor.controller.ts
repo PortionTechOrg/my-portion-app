@@ -4,11 +4,10 @@ import { ParsedToken } from 'decorators';
 import { VendorKycDTO, vendorKycSchemaWithoutFiles } from '@shared/validation/vendor-kyc-schema';
 import { ZodValidationPipe } from 'pipes/zod-validation-pipe';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { OrderService } from 'src/order/order.service';
 
 @Controller('v1/vendor')
 export class VendorController {
-    constructor(private readonly vendorService: VendorService, private readonly orderService: OrderService ) {}
+    constructor(private readonly vendorService: VendorService ) {}
 
     @Post('kyc')
     @UseInterceptors(FileFieldsInterceptor([
@@ -42,16 +41,6 @@ export class VendorController {
 
     ) {
         return this.vendorService.getkycAttribute(user.id);
-    }
-
-    @Get('order-record')
-    getOrderRecord(
-        @ParsedToken() user: { id: string },
-        @Query('limit') limit: string,
-        @Query('page') page: string,
-        @Query('status') status: string,
-    ) {
-        return this.orderService.getProductOrderRecord(user.id, page, limit, status);
     }
 
 }

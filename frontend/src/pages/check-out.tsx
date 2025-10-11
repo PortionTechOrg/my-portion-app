@@ -87,7 +87,7 @@ const Checkout: React.FC = () => {
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Shop
                 </Button>
-                <h1 className="text-3xl font-bold text-primary">Checkout</h1>
+                <h1 className="text-lg font-bold text-primary">Checkout</h1>
               </div>
 
               <div className="grid lg:grid-cols-2 gap-8">

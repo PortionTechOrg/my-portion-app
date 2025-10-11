@@ -3,7 +3,7 @@ import { Button } from "../../components/ui/button"
 import toast from "react-hot-toast"
 import { useNavigate, Link } from "react-router-dom"
 import { useAuthStore } from "@/zustand/store"
-import { useUserState } from "@/zustand/hooks/user/user.hook"
+import { useFetchUser, useUserState } from "@/zustand/hooks/user/user.hook"
 
 interface SlideMenuProps {
   isOpen: boolean
@@ -13,6 +13,10 @@ interface SlideMenuProps {
 export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
   const { logoutAuth, isLoggedIn } = useAuthStore();
   const { data: { user } } = useUserState()
+
+  if(isLoggedIn){
+    useFetchUser()
+  }
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -94,7 +98,7 @@ export function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
           <div className="flex-1 py-4">
             {isLoggedIn ? (
               menuItems.map((item) => (
-                <Link to={item.href}>
+                <Link key={item.label} to={item.href}>
                 <button
                   key={item.label}
                   className="w-full flex items-center space-x-4 px-6 py-4 text-left hover:bg-gray-50 transition-colors"

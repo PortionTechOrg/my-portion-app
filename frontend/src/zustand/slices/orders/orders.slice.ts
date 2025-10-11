@@ -1,5 +1,6 @@
 import { apiPrivate } from "@/api/temp-config";
 import type { ProductWithOrders } from "@shared/types/product";
+import type { OrderWithProductAndUser, OrderWithUserAndOrderRecordAndProduct } from "@shared/types/order";
 
 import type { StateCreator } from "zustand";
 
@@ -14,12 +15,17 @@ export interface OrderState {
     loading: boolean,
     error: string | null,
     product_orders: OrderResponseType,
-    selected_product_order: ProductWithOrders | null,
+    user_orders: OrderWithUserAndOrderRecordAndProduct[],
+    user_order_record: OrderWithUserAndOrderRecordAndProduct[],
+    selected_order: OrderWithProductAndUser | null,
+    selected_user_order_record: ProductWithOrders | null,
+    
+    clearSelectedProductOrder: () => void,
 
-    getProductOrderById: (id:string)=> Promise<void>,
+    getOrderById: (id:string)=> Promise<void>,
+    getProductOrderRecordById: (id:string)=> Promise<void>,
     getProductOrders: (page?:number, limit?:number)=> Promise<void>,
-    clearSelectedOrder: () => void,
-    setSelectedProductOrder: (id:string)=> void,
+    getUserOrders: (page?:number, limit?:number) => Promise<void>
 
 }
 
@@ -37,13 +43,31 @@ return{
             pending_products_count: 0,
             product_orders: []
         },
-        selected_product_order: null,
+        user_orders: [],
+        user_order_record: [],
+        selected_order: null,
+        selected_user_order_record: null,
 
-        getProductOrderById: async (id:string) =>{
-            set({ loading: true, selected_product_order: null, error: null})
+        getOrderById: async (id:string) =>{
+            set({ loading: true, error: null})
             try {
                 const res = await apiPrivate.get( `/order/${id}`, {} );
-                set({ selected_product_order: res.data.data.product, loading: false })
+                console.log(res.data)
+                set({ selected_order: res.data.data.orders, loading: false })
+            }catch(err:any){
+               if (err.response) {
+                    set({ error: err.response.data.message, loading: false })
+                } else {
+                    set({ error: err.message, loading: false })
+                }
+            }
+        },
+        
+        getProductOrderRecordById: async (id:string) =>{
+            set({ loading: true, selected_order: null, error: null})
+            try {
+                const res = await apiPrivate.get( `/order/${id}`, {} );
+                set({ selected_order: res.data.data.product, loading: false })
             }catch(err:any){
                if (err.response) {
                     set({ error: err.response.data.message, loading: false })
@@ -58,7 +82,7 @@ return{
             set({ loading: true, error: null})
             try {
 
-                const res = await apiPrivate.get( `/vendor/order-record`, { params: { page, limit, status}} );
+                const res = await apiPrivate.get( `product/order-record`, { params: { page, limit, status}} );
                 set({ product_orders: res.data.data, loading: false })
                 
 
@@ -71,19 +95,26 @@ return{
             }
         },
 
-        clearSelectedOrder: ()=> {
-            set({ selected_product_order: null })
+        clearSelectedProductOrder: ()=> {
+            set({ selected_order: null })
         },
 
-        setSelectedProductOrder: (id:string) => {
+        getUserOrders: async (page:number=1, limit:number=10) =>{
+            set({ loading: true, error: null})
+            try {
 
-            set((state) => {
-                const selectedItem = state.product_orders.product_orders.find(product => product.id == id)
-                return {
-                    selected_product_order: selectedItem
+                const res = await apiPrivate.get( `/order`, { params: { page, limit}} );
+                set({ user_orders: res.data.data.orders, loading: false })
+                
+
+            }catch(err:any){
+                if (err.response) {
+                    set({ error: err.response.data.message, loading: false })
+                } else {
+                    set({ error: err.message, loading: false })
                 }
-            })
+            }
 
-        }
+        },
     }
 })

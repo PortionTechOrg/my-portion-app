@@ -23,6 +23,7 @@ import ProductDetailPage from "./pages/product-details";
 import FeaturedProductedPage from "./pages/featured-product-page";
 import CartPage from "./pages/cart";
 import LoginVendorPage from "./pages/login-vendor";
+import OrderDetailsPage from "./pages/order-details";
 
 const AppRouter = () => (
   
@@ -37,6 +38,7 @@ const AppRouter = () => (
           <Route path="/register" element={<RegisterBuyer />} />
           <Route path="/register/vendor" element={<RegisterVendor />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:id" element={<OrderDetailsPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout/complete-payment/:order_record_id" element={<CompleteCheckOutPayment />} />

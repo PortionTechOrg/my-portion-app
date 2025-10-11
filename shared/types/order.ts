@@ -1,4 +1,5 @@
 import { Status } from "../enums";
+import { type OrderRecordAttribute } from "./order-record";
 import { type ProductAttribute } from "./product";
 import { type UserAttributes } from "./user";
 
@@ -27,3 +28,8 @@ export type OrderWithProductAndUser = OrderwithProduct & {
 export type OrderWithUser = OrderAttribute & {
     user: UserAttributes;
 };
+
+export type OrderWithUserAndOrderRecordAndProduct = OrderWithUser & {
+    order_record: OrderRecordAttribute,
+    product: ProductAttribute
+}

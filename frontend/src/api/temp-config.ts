@@ -27,8 +27,9 @@ apiPrivate.interceptors.response.use(
 
         const prevRequest = error?.config;
         if (error?.response?.status === 401) {
+            const logoutAuth = useAuthStore.getState().logoutAuth;
+            logoutAuth()
             setTimeout( ()=>window.location.href = '/login', 1000);
-            useAuthStore((state) => state.logoutAuth)()
             toast.error('Unauthorized access! Login.')
         }
           
@@ -51,8 +52,9 @@ api.interceptors.response.use(
     async (error) => {
 
         if (error?.response?.status === 401 && error.config.url != "/auth/login") {
+            const logoutAuth = useAuthStore.getState().logoutAuth;
+            logoutAuth()
             setTimeout( ()=>window.location.href = '/login', 3000);
-            useAuthStore((state) => state.logoutAuth)()
             toast.error('Unauthorized access! Login.')
         }
         

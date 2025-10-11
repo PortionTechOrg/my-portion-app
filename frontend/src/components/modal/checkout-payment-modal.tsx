@@ -102,7 +102,7 @@ export default function CheckoutPaymentModal() {
                         if(response.success){
 
                             setPaymentConfirmed(true);
-                            navigate('/')
+                            navigate('/orders')
                             clearCart()
                             
                         }

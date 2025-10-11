@@ -216,7 +216,7 @@ const DashboardContent = ({
               </p>
               <button 
                 onClick={onAddProduct}
-                className="bg-green-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg hover:bg-green-600 flex items-center mx-auto text-base sm:text-lg font-semibold w-full sm:w-auto justify-center"
+                className={`${Boolean(!user?.kyc_verified) ? "bg-slate-300 text-slate-500 hover:bg-slate-400" : "bg-green-500 text-white hover:bg-green-600"} px-6 sm:px-8 py-3 sm:py-4 rounded-lg flex items-center mx-auto text-base sm:text-lg font-semibold w-full sm:w-auto justify-center`}
               >
                 <Plus size={20} className="mr-2" />
                 ADD MY FIRST PRODUCT
@@ -308,7 +308,8 @@ const DashboardContent = ({
           </div>
           <button 
             onClick={handleWithdrawClick}
-            className="w-full bg-green-500 text-white py-2 sm:py-3 rounded-lg hover:bg-green-600 font-medium"
+            disabled={!Boolean(user?.kyc_verified)}
+            className={ `${Boolean(!user?.kyc_verified) ? "bg-slate-300 text-slate-500 hover:bg-slate-400" : "bg-green-500 text-white hover:bg-green-600"} w-full py-2 sm:py-3 rounded-lg font-medium`}
           >
             Withdraw Funds
           </button>

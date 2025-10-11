@@ -18,3 +18,11 @@ export const formatCurrency = (price: number) => {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+export function shortenText(title:string = '', maxLength:number = 12) {
+  const start = 3;
+  const end = 3;
+  if (title.length <= maxLength) return title;
+  
+  return `${title.slice(0, start)}...${title.slice(-end)}`;
+}

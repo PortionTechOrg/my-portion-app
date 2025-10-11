@@ -1,6 +1,6 @@
 import { useFetchUser } from "@/zustand/hooks/user/user.hook"
 import { OrderCard } from "./index"
-import { useFetchOrders, useOrderState } from "@/zustand/hooks/orders/order.hook"
+import { useFetchUserOrder, useOrderState } from "@/zustand/hooks/orders/order.hook"
 
 interface OrdersContentProps {
   onMarkDelivered: (productId: number) => void
@@ -9,7 +9,7 @@ interface OrdersContentProps {
 const OrdersContent = ({ onMarkDelivered }: OrdersContentProps) => {
   const { data: { product_orders } } = useOrderState()
 
-  useFetchOrders()
+  useFetchUserOrder()
   useFetchUser();
   
 
