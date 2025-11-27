@@ -10,35 +10,7 @@ const ProtectedRoutes = () => {
     const pathName = location.pathname;
     const { isLoading, role, token } = useAuthStore();
     
-    useEffect(()=>{
-
-        if(!isLoading && token !== "" && role !== ''){
-            if ((role ==  Roles.ADMIN || role == Roles.SUBADMIN) && !pathName.includes('/admin')){
-                navigate('/admin');
-            }
-            
-            if (role ==  Roles.VENDOR && !pathName.includes('/dashboard') ){
-                navigate('/dashboard');
-            }
-            
-            if(role != Roles.VENDOR && pathName.includes('/dashboard')){
-
-                navigate('/')
-            }
-
-
-            
-        }
-
-        if(!isLoading && token == ""){
-                navigate('/login');
-        }
-    }, [isLoading, token, role])
-
-
-     if(isLoading || token =="") {
-        return null
-     }
+    
     return <Outlet />
     
 }

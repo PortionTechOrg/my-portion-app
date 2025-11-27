@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import path from 'path';
+import * as path from 'path';
 
 @Global()
 @Module({

@@ -8,7 +8,7 @@ export const createUserSchema = z.object({
   role: z.enum(['vendor', 'user', 'admin', 'subadmin']),
   password: z.string().min(6, 'Password must be at least 6 characters').max(100, 'Password is too long'),
   confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
+}).refine((data) => data.password == data.confirmPassword, {
   message: "Passwords don't match",
   path: ['confirmPassword'],
 }).required();

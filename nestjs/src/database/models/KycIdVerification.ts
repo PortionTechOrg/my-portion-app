@@ -58,10 +58,10 @@ export class KycIdVerification extends Model<KycIdVerificationAttribute> impleme
   // Sequelize-typescript manages these automatically when `timestamps: true` and `paranoid: true`
   // You can declare them explicitly with their decorators for better type clarity
   @CreatedAt
-  declare createdAt: CreationOptional<Date>; // Use CreationOptional for auto-managed dates
+  declare createdAt: CreationOptional<Date>;
 
   @UpdatedAt
-  declare updatedAt: CreationOptional<Date>; // Use CreationOptional for auto-managed dates
+  declare updatedAt: CreationOptional<Date>;
 
   @DeletedAt
   declare deletedAt?: Date;

@@ -10,7 +10,7 @@ export const vendorKycSchema = z.object( {
     address: z.string(),
     town: z.string(),
     city: z.string(),
-    state: z.string(),
+    state: z.file(),
 
 
     business_name: z.string(),
