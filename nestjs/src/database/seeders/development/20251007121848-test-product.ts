@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import { mockVendorKycBusiness, mockVendorKycBusinessDocs, mockVendorKycIdVerification, mockVendorKycPersonal, mockVendorSeed } from "../mock-vendor";
-import { mockUserSeed } from "../mock-user";
-import { mockProductSeed } from "../mock-product";
+import { mockVendorKycBusiness, mockVendorKycBusinessDocs, mockVendorKycIdVerification, mockVendorKycPersonal, mockVendorSeed } from "../../mock-vendor";
+import { mockUserSeed } from "../../mock-user";
+import { mockProductSeed } from "../../mock-product";
 
 
 /** @type {import('sequelize-cli').Migration} */
