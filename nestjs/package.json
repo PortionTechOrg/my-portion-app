@@ -11,7 +11,7 @@
     "migrate:prod": "dotenv -e .env -- cross-env NODE_ENV=production npx sequelize-cli db:migrate",
     "migrate:undo": "dotenv -- sequelize-cli db:migrate:undo",
     "migrate:undo:all": "dotenv -- sequelize-cli db:migrate:undo:all",
-    "start:prod": "node .",
+    "start:prod": "node dist/nestjs/src/main",
     "migrate:seed:all": "dotenv -- sequelize-cli db:seed:all",
     "migrate:seed:undo": "dotenv -- sequelize-cli db:seed:undo",
     "migrate:skeleton": "dotenv -- sequelize-cli migration:generate --name migration-skeleton"
