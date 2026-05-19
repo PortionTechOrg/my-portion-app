@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import AppRouter from './router.tsx'
 import { AuthProvider } from './hooks/auth-provider.tsx'
 import { Toaster } from 'react-hot-toast'
+// import { Toaster } from 'react-hot-toast'
 
 
 createRoot(document.getElementById('root')!).render(
